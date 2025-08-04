@@ -1,36 +1,38 @@
 name: Pages
 
 on:
-  push:
-    branches:
-      - hexo  # default branch
+    push:
+        branches:
+            - hexo # default branch
 
 jobs:
-  pages:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - name: Cache NPM dependencies
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-npm-cache
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
-        run: npm install
-      - name: Build
-        run: |
-          cd themes/hexo-theme-suka-1.4.0
-          npm install --production
-          cd ..
-          npm run build
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+    pages:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install Bun
+              run: |
+                  curl -fsSL https://bun.sh/install | bash
+                  echo "$HOME/.bun/bin" >> $GITHUB_PATH
+            - name: Cache Bun dependencies
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      node_modules
+                      .bun/install/cache
+                  key: ${{ runner.OS }}-bun-cache
+                  restore-keys: |
+                      ${{ runner.OS }}-bun-cache
+            - name: Install Dependencies
+              run: bun install
+            - name: Build
+              run: |
+                  cd themes/hexo-theme-suka-1.4.0
+                  bun install --production
+                  cd ..
+                  bun run build
+            - name: Deploy
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./public
