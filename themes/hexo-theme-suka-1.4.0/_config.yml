@@ -72,15 +72,12 @@ footer:
 # ---------------------------------------------------------------
 uiux:
   # Muilt line slogan is supported.
-  slogan: 烟霭也似的遐思和怅惘。
+  slogan: 烟霭也似的遐思和怅惘
   # For most link color except post color
   link_color:
   primary_color:
   # Background color
   bg_color:
-
-img:
-  avatar: https://q1.qlogo.cn/g?b=qq&nk=2933170747&s=640
 
 # ---------------------------------------------------------------
 # Menu Settings
@@ -315,13 +312,13 @@ hanabi:
 
 # Prism
 # To use prism, you need to disable all highlight option in hexo's site config.
-#
-#   highlight:
-#     enable: false
-#     line_number: false
-#     auto_detect: false
-#     tab_replace: false
-#
+
+  # highlight:
+  #   enable: true
+  #   line_number: false
+  #   auto_detect: false
+  #   tab_replace: false
+
 # Then you need to disable other code hightlight first, and enable prism at site config:
 #
 #     suka_theme:
@@ -336,13 +333,13 @@ hanabi:
 
 # Google Code Prettify
 # To use prettify, you need to disable all highlight option in hexo's site config.
-#
+
 #   highlight:
 #     enable: false
 #     line_number: false
 #     auto_detect: false
 #     tab_replace: false
-#
+
 prettify:
   enable: false
   linenumber: true # We prefer to enable for avoiding some pretiffy's bugs.
