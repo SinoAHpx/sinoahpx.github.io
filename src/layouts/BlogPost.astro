@@ -20,9 +20,6 @@ const {
 	tags = [],
 	categories = [],
 } = Astro.props as Props;
-
-const categoriesLabel = categories.join(', ');
-const tagsLabel = tags.map((tag) => `#${tag}`).join(' ');
 ---
 
 <html lang="en">
@@ -53,7 +50,7 @@ const tagsLabel = tags.map((tag) => `#${tag}`).join(' ');
 							{title}
 						</h1>
 						<div
-							class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-zinc-500"
+							class="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-500"
 						>
 							<span class="whitespace-nowrap">
 								<FormattedDate date={pubDate} />
@@ -66,18 +63,24 @@ const tagsLabel = tags.map((tag) => `#${tag}`).join(' ');
 									)
 								}
 							</span>
-							{categoriesLabel && (
-								<>
-									<span aria-hidden="true">•</span>
-									<span class="whitespace-nowrap">{categoriesLabel}</span>
-								</>
-							)}
-							{tagsLabel && (
-								<>
-									<span aria-hidden="true">•</span>
-									<span class="whitespace-nowrap">{tagsLabel}</span>
-								</>
-							)}
+							{categories.map((category) => (
+								<a
+									href={`/archive?view=categories&category=${encodeURIComponent(
+										category,
+									)}`}
+									class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-[0.7rem] font-medium text-zinc-600 no-underline hover:border-zinc-300 hover:text-zinc-900"
+								>
+									{category}
+								</a>
+							))}
+							{tags.map((tag) => (
+								<a
+									href={`/archive?view=tags&tag=${encodeURIComponent(tag)}`}
+									class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-[0.7rem] font-medium text-zinc-600 no-underline hover:border-zinc-300 hover:text-zinc-900"
+								>
+									#{tag}
+								</a>
+							))}
 						</div>
 					</header>
 					<slot />

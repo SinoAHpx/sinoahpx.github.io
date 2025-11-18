@@ -1,0 +1,268 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+type Post = CollectionEntry<'blog'>;
+
+const allPosts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const url = Astro.url;
+const view = url.searchParams.get('view') ?? 'date';
+const activeTag = url.searchParams.get('tag') ?? '';
+const activeCategory = url.searchParams.get('category') ?? '';
+
+function groupByYear(posts: Post[]) {
+	const groups = new Map<number, Post[]>();
+
+	for (const post of posts) {
+		const year = post.data.pubDate.getFullYear();
+		const list = groups.get(year) ?? [];
+		list.push(post);
+		groups.set(year, list);
+	}
+
+	return Array.from(groups.entries()).sort((a, b) => b[0] - a[0]);
+}
+
+function groupByKey(posts: Post[], key: 'tags' | 'categories') {
+	const groups = new Map<string, Post[]>();
+
+	for (const post of posts) {
+		const values = post.data[key] ?? [];
+		for (const value of values) {
+			const trimmed = value.trim();
+			if (!trimmed) continue;
+			const list = groups.get(trimmed) ?? [];
+			list.push(post);
+			groups.set(trimmed, list);
+		}
+	}
+
+	return Array.from(groups.entries()).sort(([a], [b]) =>
+		a.localeCompare(b, 'en'),
+	);
+}
+
+const dateGroups = groupByYear(allPosts);
+const categoryGroups = groupByKey(allPosts, 'categories');
+const tagGroups = groupByKey(allPosts, 'tags');
+
+const visibleCategoryGroups =
+	activeCategory && view === 'categories'
+		? categoryGroups.filter(([name]) => name === activeCategory)
+		: categoryGroups;
+
+const visibleTagGroups =
+	activeTag && view === 'tags'
+		? tagGroups.filter(([name]) => name === activeTag)
+		: tagGroups;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Archive – ${SITE_TITLE}`}
+			description={SITE_DESCRIPTION}
+		/>
+	</head>
+	<body>
+		<Header />
+		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
+			<section class="space-y-8">
+				<header class="space-y-3">
+					<h1 class="text-2xl font-semibold tracking-tight text-zinc-900">
+						Archive
+					</h1>
+					<p class="text-sm text-zinc-600">
+						Browse posts by date, category, or tag.
+					</p>
+
+					<nav class="mt-4 flex gap-3 text-xs font-medium text-zinc-500">
+						<a
+							href="/archive?view=date"
+							class:list={[
+								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
+								view === 'date'
+									? 'border-zinc-900 bg-zinc-900 text-zinc-50'
+									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900',
+							]}
+						>
+							Date
+						</a>
+						<a
+							href="/archive?view=categories"
+							class:list={[
+								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
+								view === 'categories'
+									? 'border-zinc-900 bg-zinc-900 text-zinc-50'
+									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900',
+							]}
+						>
+							Categories
+						</a>
+						<a
+							href="/archive?view=tags"
+							class:list={[
+								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
+								view === 'tags'
+									? 'border-zinc-900 bg-zinc-900 text-zinc-50'
+									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900',
+							]}
+						>
+							Tags
+						</a>
+					</nav>
+
+					{
+						view === 'categories' && activeCategory && (
+							<p class="text-xs text-zinc-500">
+								Showing posts in category
+								<span class="ml-1 font-medium text-zinc-900">
+									{activeCategory}
+								</span>
+								.
+							</p>
+						)
+					}
+					{
+						view === 'tags' && activeTag && (
+							<p class="text-xs text-zinc-500">
+								Showing posts tagged
+								<span class="ml-1 font-medium text-zinc-900">
+									#{activeTag}
+								</span>
+								.
+							</p>
+						)
+					}
+				</header>
+
+				{
+					view === 'date' && (
+						<div class="space-y-8">
+							{
+								dateGroups.map(([year, posts]) => (
+									<section class="space-y-3" aria-labelledby={`year-${year}`}>
+										<h2
+											id={`year-${year}`}
+											class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500"
+										>
+											{year}
+										</h2>
+										<ul class="space-y-2 text-sm">
+											{
+												posts.map((post) => (
+													<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+														<span class="w-24 shrink-0 text-xs text-zinc-400">
+															<FormattedDate date={post.data.pubDate} />
+														</span>
+														<a
+															href={`/blog/${post.id}/`}
+															class="flex-1 text-zinc-900 no-underline hover:underline"
+														>
+															{post.data.title}
+														</a>
+													</li>
+												))
+											}
+										</ul>
+									</section>
+								))
+							}
+						</div>
+					)
+				}
+
+				{
+					view === 'categories' && (
+						<div class="space-y-8">
+							{
+								visibleCategoryGroups.map(([name, posts]) => (
+									<section
+										class="space-y-3"
+										aria-labelledby={`category-${name}`}
+									>
+										<h2
+											id={`category-${name}`}
+											class="text-sm font-semibold text-zinc-900"
+										>
+											{name}
+											<span class="ml-2 text-xs font-normal text-zinc-400">
+												{posts.length} post{posts.length === 1 ? '' : 's'}
+											</span>
+										</h2>
+										<ul class="space-y-2 text-sm">
+											{
+												posts.map((post) => (
+													<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+														<span class="w-24 shrink-0 text-xs text-zinc-400">
+															<FormattedDate date={post.data.pubDate} />
+														</span>
+														<a
+															href={`/blog/${post.id}/`}
+															class="flex-1 text-zinc-900 no-underline hover:underline"
+														>
+															{post.data.title}
+														</a>
+													</li>
+												))
+											}
+										</ul>
+									</section>
+								))
+							}
+						</div>
+					)
+				}
+
+				{
+					view === 'tags' && (
+						<div class="space-y-8">
+							{
+								visibleTagGroups.map(([name, posts]) => (
+									<section class="space-y-3" aria-labelledby={`tag-${name}`}>
+										<h2
+											id={`tag-${name}`}
+											class="text-sm font-semibold text-zinc-900"
+										>
+											#{name}
+											<span class="ml-2 text-xs font-normal text-zinc-400">
+												{posts.length} post{posts.length === 1 ? '' : 's'}
+											</span>
+										</h2>
+										<ul class="space-y-2 text-sm">
+											{
+												posts.map((post) => (
+													<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+														<span class="w-24 shrink-0 text-xs text-zinc-400">
+															<FormattedDate date={post.data.pubDate} />
+														</span>
+														<a
+															href={`/blog/${post.id}/`}
+															class="flex-1 text-zinc-900 no-underline hover:underline"
+														>
+															{post.data.title}
+														</a>
+													</li>
+												))
+											}
+										</ul>
+									</section>
+								))
+							}
+						</div>
+					)
+				}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
