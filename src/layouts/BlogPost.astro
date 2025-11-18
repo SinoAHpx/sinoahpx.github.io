@@ -65,9 +65,9 @@ const {
 							</span>
 							{categories.map((category) => (
 								<a
-									href={`/archive?view=categories&category=${encodeURIComponent(
+									href={`/archive/categories/${encodeURIComponent(
 										category,
-									)}`}
+									)}/`}
 									class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-[0.7rem] font-medium text-zinc-600 no-underline hover:border-zinc-300 hover:text-zinc-900"
 								>
 									{category}
@@ -75,7 +75,7 @@ const {
 							))}
 							{tags.map((tag) => (
 								<a
-									href={`/archive?view=tags&tag=${encodeURIComponent(tag)}`}
+									href={`/archive/tags/${encodeURIComponent(tag)}/`}
 									class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-[0.7rem] font-medium text-zinc-600 no-underline hover:border-zinc-300 hover:text-zinc-900"
 								>
 									#{tag}
