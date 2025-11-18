@@ -1,21 +1,50 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
-const PAGE_SIZE = 10;
+type Post = CollectionEntry<'blog'>;
 
-const allPosts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+type Props = {
+	page: number;
+	totalPages: number;
+	posts: Post[];
+};
 
-const page = 1;
-const totalPages = Math.ceil(allPosts.length / PAGE_SIZE) || 1;
-const posts = allPosts.slice(0, PAGE_SIZE);
+export async function getStaticPaths() {
+	const allPosts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
+
+	const totalPages = Math.ceil(allPosts.length / 10);
+
+	if (totalPages <= 1) {
+		return [];
+	}
+
+	// We already render page 1 at `/` via src/pages/index.astro
+	// so here we only generate /page/2, /page/3, ...
+	return Array.from({ length: totalPages - 1 }).map((_, i) => {
+		const page = i + 2;
+		const start = (page - 1) * 10;
+		const end = start + 10;
+
+		return {
+			params: { page: String(page) },
+			props: {
+				page,
+				totalPages,
+				posts: allPosts.slice(start, end),
+			},
+		};
+	});
+}
+
+const { page, totalPages, posts } = Astro.props as Props;
 ---
 
 <!doctype html>
@@ -117,15 +146,24 @@ const posts = allPosts.slice(0, PAGE_SIZE);
 				{
 					totalPages > 1 && (
 						<nav class="pagination">
-							<span />
+							<a
+								class="page-link"
+								href={page === 2 ? '/' : `/page/${page - 1}/`}
+							>
+								← Newer posts
+							</a>
 
 							<span class="page-info">
 								Page {page} of {totalPages}
 							</span>
 
-							<a class="page-link" href="/page/2/">
-								Older posts →
-							</a>
+							{page < totalPages ? (
+								<a class="page-link" href={`/page/${page + 1}/`}>
+									Older posts →
+								</a>
+							) : (
+								<span />
+							)}
 						</nav>
 					)
 				}
@@ -134,4 +172,3 @@ const posts = allPosts.slice(0, PAGE_SIZE);
 		<Footer />
 	</body>
 </html>
-
