@@ -1,17 +1,10 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* Site-wide layout tweaks */
+/* Base site styles */
 body {
-  /* Light gray background so white cards stand out */
-  background-color: #f3f4f6;
-}
-
-/* Center the main content column on list pages (home + pagination) */
-main > section {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 2rem 1rem 3rem;
+  /* Subtle neutral background, dark text, and smoother text rendering */
+  @apply bg-zinc-50 text-zinc-900 antialiased;
 }
 
 /* Let prose content span the full width of its card */

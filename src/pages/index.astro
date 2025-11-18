@@ -25,33 +25,34 @@ const posts = allPosts.slice(0, PAGE_SIZE);
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul class="list-none m-0 p-0 flex flex-col gap-6">
+		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
+			<section class="space-y-8">
+				<ul class="space-y-5">
 					{
 						posts.map((post) => (
-							<li
-								class="rounded-xl border border-[rgb(var(--gray-light))] bg-white overflow-hidden"
-							>
-								<a href={`/blog/${post.id}/`} class="block px-6 py-5 no-underline">
+							<li>
+								<a
+									href={`/blog/${post.id}/`}
+									class="block rounded-xl border border-zinc-200 bg-white/80 p-5 no-underline transition hover:border-zinc-300 hover:bg-white"
+								>
 									{post.data.heroImage && (
-										<div class="mt-[-1.25rem] mx-[-1.5rem] mb-4">
+										<div class="mb-4 overflow-hidden rounded-lg">
 											<Image
 												width={720}
 												height={360}
 												src={post.data.heroImage}
 												alt=""
-												class="w-full block rounded-t-xl"
+												class="aspect-[3/1] w-full object-cover"
 											/>
 										</div>
 									)}
-									<h2 class="m-0 mb-1 text-[1.2rem] text-[rgb(var(--black))]">
+									<h2 class="mb-1 text-base font-semibold leading-snug text-zinc-900">
 										{post.data.title}
 									</h2>
-									<p class="m-0 mb-2 text-[0.9rem] text-[rgb(var(--gray))]">
+									<p class="mt-1 text-xs text-zinc-500">
 										<FormattedDate date={post.data.pubDate} />
 									</p>
-									<p class="m-0 text-[0.95rem] text-[rgb(var(--gray-dark))]">
+									<p class="mt-2 text-sm text-zinc-600">
 										{post.data.description}
 									</p>
 								</a>
@@ -63,7 +64,7 @@ const posts = allPosts.slice(0, PAGE_SIZE);
 				{
 					totalPages > 1 && (
 						<nav
-							class="mt-8 flex items-center justify-between text-[0.9rem] text-[rgb(var(--gray))]"
+							class="mt-10 flex items-center justify-between text-xs text-zinc-500"
 						>
 							<span />
 
@@ -72,7 +73,7 @@ const posts = allPosts.slice(0, PAGE_SIZE);
 							</span>
 
 							<a
-								class="text-[rgb(var(--gray))] no-underline uppercase tracking-[0.12em] hover:text-[rgb(var(--black))]"
+								class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900"
 								href="/page/2/"
 							>
 								Older posts →

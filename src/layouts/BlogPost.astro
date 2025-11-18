@@ -32,28 +32,28 @@ const tagsLabel = tags.map((tag) => `#${tag}`).join(' ');
 
 	<body>
 		<Header />
-		<main class="w-full m-0 px-4 pt-8 pb-12">
+		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
 			<article
-				class="w-[720px] max-w-full mx-auto rounded-xl border border-[rgb(var(--gray-light))] bg-white overflow-hidden"
+				class="overflow-hidden rounded-xl border border-zinc-200 bg-white/80"
 			>
-				<div>
-					{heroImage && (
-						<Image
-							width={1020}
-							height={510}
-							src={heroImage}
-							alt=""
-							class="block w-full rounded-t-xl"
-						/>
-					)}
-				</div>
+				{heroImage && (
+					<Image
+						width={1020}
+						height={510}
+						src={heroImage}
+						alt=""
+						class="h-64 w-full object-cover sm:h-72"
+					/>
+				)}
 				<div
-					class="prose prose-p:mb-[2em] px-7 pt-6 pb-8 text-[0.95rem] leading-[1.7] text-[rgb(var(--gray-dark))]"
+					class="prose prose-zinc max-w-none px-6 pb-8 pt-6 text-sm leading-relaxed"
 				>
-					<div class="pb-4 text-center leading-none">
-						<h1 class="m-0 text-2xl">{title}</h1>
+					<header class="mb-6 text-center not-prose">
+						<h1 class="mb-2 text-2xl font-semibold tracking-tight text-zinc-900">
+							{title}
+						</h1>
 						<div
-							class="mt-2 flex flex-wrap justify-center items-baseline gap-1.5 text-[0.85rem] text-[rgb(var(--gray))]"
+							class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-zinc-500"
 						>
 							<span class="whitespace-nowrap">
 								<FormattedDate date={pubDate} />
@@ -68,19 +68,18 @@ const tagsLabel = tags.map((tag) => `#${tag}`).join(' ');
 							</span>
 							{categoriesLabel && (
 								<>
-									<span class="text-[rgb(var(--gray))]">/</span>
+									<span aria-hidden="true">•</span>
 									<span class="whitespace-nowrap">{categoriesLabel}</span>
 								</>
 							)}
 							{tagsLabel && (
 								<>
-									<span class="text-[rgb(var(--gray))]">/</span>
+									<span aria-hidden="true">•</span>
 									<span class="whitespace-nowrap">{tagsLabel}</span>
 								</>
 							)}
 						</div>
-						<hr class="mt-4 mb-0 border-t border-[rgb(var(--gray-light))]" />
-					</div>
+					</header>
 					<slot />
 				</div>
 			</article>
