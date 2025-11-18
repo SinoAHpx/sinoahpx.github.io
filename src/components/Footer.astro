@@ -2,28 +2,15 @@
 const today = new Date();
 ---
 
-<footer>
+<footer
+	class="px-4 pt-8 pb-10 text-center text-[rgb(var(--gray))]"
+	style="background: linear-gradient(var(--gray-gradient)) no-repeat;"
+>
 	&copy; {today.getFullYear()} Your name here. All rights reserved.
-	<a href="/rss.xml" class="rss-link">RSS</a>
+	<a
+		href="/rss.xml"
+		class="inline-block mt-3 text-[0.9rem] text-[rgb(var(--gray))] no-underline uppercase tracking-[0.12em] hover:text-[rgb(var(--gray-dark))]"
+	>
+		RSS
+	</a>
 </footer>
-<style>
-	footer {
-		padding: 2em 1em 2.5em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
-		text-align: center;
-	}
-
-	.rss-link {
-		display: inline-block;
-		margin-top: 0.75em;
-		font-size: 0.9rem;
-		color: rgb(var(--gray));
-		text-decoration: none;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-	}
-	.rss-link:hover {
-		color: rgb(var(--gray-dark));
-	}
-</style>
