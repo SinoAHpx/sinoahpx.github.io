@@ -10,7 +10,7 @@ pubDate: 2022-07-21 19:00:28
 password:
 summary:
 tags: [生活, 杂谈]
-categories: [社会生活]
+categories: [Life]
 ---
 
 ## 前言

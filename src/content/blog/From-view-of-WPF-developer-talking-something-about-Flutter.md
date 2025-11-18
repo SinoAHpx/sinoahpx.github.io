@@ -8,7 +8,7 @@ mathjax: true
 date: 2022-04-16 15:41:00
 pubDate: 2022-04-16 15:41:00
 tags: ["CSharp", "WPF", "UI", "Flutter"]
-categories: dev
+categories: Dev
 ---
 
 # Prologue

@@ -10,7 +10,7 @@ pubDate: 2022-04-28 00:44:59
 password:
 summary: 
 tags: ["母语时间", "半吊子哲学"]
-categories: ["母语时间"]
+categories: ["Life"]
 hidden: true
 ---
 

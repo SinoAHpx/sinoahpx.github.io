@@ -9,7 +9,7 @@ date: 2023-12-03 02:30:47
 pubDate: 2023-12-03 02:30:47
 password:
 summary: 2023 年却也这么离开。
-tags: Life
+tags: [Life]
 categories: Life
 ---
 

@@ -10,7 +10,7 @@ pubDate: 2022-07-27 10:17:59
 password:
 summary:
 tags: [CSharp, Nuget]
-categories: [dev]
+categories: [ Dev ]
 ---
 
 ## Background

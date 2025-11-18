@@ -4,7 +4,7 @@ description: 'Investigating why a C# Process.Exited event handler never fires an
 date: 2021-08-27 22:22:00
 pubDate: 2021-08-27 22:22:00
 tags: CSharp
-categories: dev
+categories: Dev
 ---
 
 As the code below:

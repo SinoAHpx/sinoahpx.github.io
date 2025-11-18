@@ -1,5 +1,5 @@
 ---
-title: 'Solving: There should be exactly one item with [DropdownButtonFormField]''s value'
+title: "Solving: There should be exactly one item with [DropdownButtonFormField]'s value"
 description: "Fixing Flutter error 'There should be exactly one item with [DropdownButtonFormField]'s value' by handling dropdown state correctly."
 top: false
 cover: false
@@ -10,7 +10,7 @@ pubDate: 2022-06-06 16:18:28
 password:
 summary: There should be exactly one item with [DropdownButtonFormField]''s value blah blah
 tags: [flutter, dart, ui]
-categories: dev
+categories: Dev
 ---
 
 ## Scenario
@@ -71,7 +71,7 @@ Exception has occurred.
 _AssertionError ('package:flutter/src/material/dropdown.dart': Failed assertion: line 882 pos 15: 'items == null || items.isEmpty || value == null ||
               items.where((DropdownMenuItem<T> item) {
                 return item.value == value;
-              }).length == 1': There should be exactly one item with [DropdownButton]'s value: Japan. 
+              }).length == 1': There should be exactly one item with [DropdownButton]'s value: Japan.
 Either zero or 2 or more [DropdownMenuItem]s were detected with the same value)
 ```
 

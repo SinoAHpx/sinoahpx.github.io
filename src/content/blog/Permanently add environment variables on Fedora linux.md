@@ -4,7 +4,7 @@ description: 'How to permanently add environment variables on Fedora Linux so th
 date: 2022-04-13 23:40:00
 pubDate: 2022-04-13 23:40:00
 tags: ["Linux","Fedora"]
-categories: system
+categories: Dev
 ---
 
 # Background

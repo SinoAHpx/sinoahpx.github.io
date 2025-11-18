@@ -4,7 +4,7 @@ description: 'Using Kotlin Gradle DSL and the Shadow plugin to build a fat JAR f
 date: 2021-08-27 22:00:00
 pubDate: 2021-08-27 22:00:00
 tags: Kotlin
-Categories: dev
+Categories: Dev
 ---
 
 First, let's get started by creating a new kotlin(java the same) project. Just select the Gradle template tab and check `Kotlin DSL build script`. By the way, if you just want a very simple try, just choose whatever you want `Additional Libraries and Frameworks`, and just keep the default package configuration.
