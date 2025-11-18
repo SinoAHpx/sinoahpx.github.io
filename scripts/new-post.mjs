@@ -41,6 +41,8 @@ const content = `---
 title: "${title.replace(/"/g, '\\"')}"
 description: "Short description of the post."
 pubDate: ${today}
+tags: []
+categories: []
 ---
 
 # ${title}
@@ -50,4 +52,3 @@ Write your post content here.
 
 fs.writeFileSync(filePath, content, 'utf8');
 console.log(`Created new post: ${filePath}`);
-

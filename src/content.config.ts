@@ -13,6 +13,20 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
+			tags: z
+				.union([z.array(z.string()), z.string()])
+				.optional()
+				.transform((value) => {
+					if (!value) return [];
+					return Array.isArray(value) ? value : [value];
+				}),
+			categories: z
+				.union([z.array(z.string()), z.string()])
+				.optional()
+				.transform((value) => {
+					if (!value) return [];
+					return Array.isArray(value) ? value : [value];
+				}),
 		}),
 });
 

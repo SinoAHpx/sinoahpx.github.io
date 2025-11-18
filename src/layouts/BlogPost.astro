@@ -6,9 +6,23 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+	tags?: string[];
+	categories?: string[];
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	tags = [],
+	categories = [],
+} = Astro.props as Props;
+
+const categoriesLabel = categories.join(', ');
+const tagsLabel = tags.map((tag) => `#${tag}`).join(' ');
 ---
 
 <html lang="en">
@@ -16,38 +30,55 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
 				width: 100%;
+				margin: 0;
+				padding: 2rem 1rem 3rem 1rem;
+			}
+			.post-card {
+				width: 720px;
+				max-width: 100%;
+				margin: 0 auto;
+				border-radius: 12px;
+				border: 1px solid rgb(var(--gray-light));
+				background: #fff;
+				overflow: hidden;
 			}
 			.hero-image img {
 				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
+				width: 100%;
+				border-radius: 12px 12px 0 0;
 			}
 			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
+				padding: 1.5rem 1.75rem 2rem 1.75rem;
 				color: rgb(var(--gray-dark));
+				font-size: 0.95rem;
+				line-height: 1.7;
 			}
 			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
+				margin-bottom: 1rem;
+				padding: 0 0 1rem 0;
 				text-align: center;
 				line-height: 1;
 			}
 			.title h1 {
 				margin: 0 0 0.5em 0;
+				font-size: 2rem;
 			}
-			.date {
-				margin-bottom: 0.5em;
+			.meta {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				align-items: baseline;
+				gap: 0.35rem;
+				margin-top: 0.5rem;
 				color: rgb(var(--gray));
+				font-size: 0.85rem;
+			}
+			.meta-separator {
+				color: rgb(var(--gray));
+			}
+			.meta-part {
+				white-space: nowrap;
 			}
 			.last-updated-on {
 				font-style: italic;
@@ -58,23 +89,38 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	<body>
 		<Header />
 		<main>
-			<article>
+			<article class="post-card">
 				<div class="hero-image">
 					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
 				</div>
 				<div class="prose">
 					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
 						<h1>{title}</h1>
+						<div class="meta">
+							<span class="meta-part">
+								<FormattedDate date={pubDate} />
+								{
+									updatedDate && (
+										<span class="last-updated-on">
+											{' '}
+											(Updated <FormattedDate date={updatedDate} />)
+										</span>
+									)
+								}
+							</span>
+							{categoriesLabel && (
+								<>
+									<span class="meta-separator">/</span>
+									<span class="meta-part">{categoriesLabel}</span>
+								</>
+							)}
+							{tagsLabel && (
+								<>
+									<span class="meta-separator">/</span>
+									<span class="meta-part">{tagsLabel}</span>
+								</>
+							)}
+						</div>
 						<hr />
 					</div>
 					<slot />

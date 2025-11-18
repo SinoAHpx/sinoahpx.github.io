@@ -4,7 +4,7 @@ description: 'Step-by-step guide to building and deploying a documentation websi
 date: 2021-08-27 22:00:00
 pubDate: 2021-08-27 22:00:00
 tags: ["VuePress", "documenting"]
-categories: Dev
+categories: [Dev]
 ---
 
 # How to Build a document site by Vuepress

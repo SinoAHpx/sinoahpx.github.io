@@ -4,7 +4,7 @@ description: 用 C# 反射优雅地将 JSON 文本动态转换为不同的实体
 date: 2021-08-27 22:00:00
 pubDate: 2021-08-27 22:00:00
 tags: [CSharp]
-categories: Dev
+categories: [Dev]
 ---
 
 ## Scenario
