@@ -74,7 +74,7 @@ const tagGroups = groupByKey(allPosts, 'tags');
 						<a
 							href="/archive?view=date"
 							data-archive-pill="date"
-							class="inline-flex items-center rounded-full border border-zinc-900 bg-zinc-900 px-3 py-1 text-zinc-50 no-underline transition"
+							class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 no-underline transition hover:border-zinc-300 hover:text-zinc-900"
 						>
 							Date
 						</a>
@@ -97,7 +97,7 @@ const tagGroups = groupByKey(allPosts, 'tags');
 
 				<div
 					data-archive-view="date"
-					class="space-y-8"
+					class="space-y-8 hidden"
 				>
 					{
 						dateGroups.map(([year, posts]) => (
