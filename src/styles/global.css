@@ -1,6 +1,13 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Slightly larger global font sizes */
+@theme {
+  --text-xs: 0.8rem;
+  --text-sm: 0.95rem;
+  --text-base: 1.05rem;
+}
+
 /* Base site styles */
 body {
   /* Subtle neutral background, dark text, and smoother text rendering */
