@@ -12,11 +12,6 @@ const allPosts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-const url = Astro.url;
-const view = url.searchParams.get('view') ?? 'date';
-const activeTag = url.searchParams.get('tag') ?? '';
-const activeCategory = url.searchParams.get('category') ?? '';
-
 function groupByYear(posts: Post[]) {
 	const groups = new Map<number, Post[]>();
 
@@ -52,16 +47,6 @@ function groupByKey(posts: Post[], key: 'tags' | 'categories') {
 const dateGroups = groupByYear(allPosts);
 const categoryGroups = groupByKey(allPosts, 'categories');
 const tagGroups = groupByKey(allPosts, 'tags');
-
-const visibleCategoryGroups =
-	activeCategory && view === 'categories'
-		? categoryGroups.filter(([name]) => name === activeCategory)
-		: categoryGroups;
-
-const visibleTagGroups =
-	activeTag && view === 'tags'
-		? tagGroups.filter(([name]) => name === activeTag)
-		: tagGroups;
 ---
 
 <!doctype html>
@@ -87,182 +72,212 @@ const visibleTagGroups =
 					<nav class="mt-4 flex gap-3 text-xs font-medium text-zinc-500">
 						<a
 							href="/archive?view=date"
-							class:list={[
-								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
-								view === 'date'
-									? 'border-zinc-900 bg-zinc-900 text-zinc-50'
-									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900',
-							]}
+							data-archive-pill="date"
+							class="inline-flex items-center rounded-full border border-zinc-900 bg-zinc-900 px-3 py-1 text-zinc-50 no-underline transition"
 						>
 							Date
 						</a>
 						<a
 							href="/archive?view=categories"
-							class:list={[
-								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
-								view === 'categories'
-									? 'border-zinc-900 bg-zinc-900 text-zinc-50'
-									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900',
-							]}
+							data-archive-pill="categories"
+							class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 no-underline transition hover:border-zinc-300 hover:text-zinc-900"
 						>
 							Categories
 						</a>
 						<a
 							href="/archive?view=tags"
-							class:list={[
-								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
-								view === 'tags'
-									? 'border-zinc-900 bg-zinc-900 text-zinc-50'
-									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900',
-							]}
+							data-archive-pill="tags"
+							class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 no-underline transition hover:border-zinc-300 hover:text-zinc-900"
 						>
 							Tags
 						</a>
 					</nav>
-
-					{
-						view === 'categories' && activeCategory && (
-							<p class="text-xs text-zinc-500">
-								Showing posts in category
-								<span class="ml-1 font-medium text-zinc-900">
-									{activeCategory}
-								</span>
-								.
-							</p>
-						)
-					}
-					{
-						view === 'tags' && activeTag && (
-							<p class="text-xs text-zinc-500">
-								Showing posts tagged
-								<span class="ml-1 font-medium text-zinc-900">
-									#{activeTag}
-								</span>
-								.
-							</p>
-						)
-					}
 				</header>
 
-				{
-					view === 'date' && (
-						<div class="space-y-8">
-							{
-								dateGroups.map(([year, posts]) => (
-									<section class="space-y-3" aria-labelledby={`year-${year}`}>
-										<h2
-											id={`year-${year}`}
-											class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500"
-										>
-											{year}
-										</h2>
-										<ul class="space-y-2 text-sm">
-											{
-												posts.map((post) => (
-													<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-														<span class="w-24 shrink-0 text-xs text-zinc-400">
-															<FormattedDate date={post.data.pubDate} />
-														</span>
-														<a
-															href={`/blog/${post.id}/`}
-															class="flex-1 text-zinc-900 no-underline hover:underline"
-														>
-															{post.data.title}
-														</a>
-													</li>
-												))
-											}
-										</ul>
-									</section>
-								))
-							}
-						</div>
-					)
-				}
+				<div
+					data-archive-view="date"
+					class="space-y-8"
+				>
+					{
+						dateGroups.map(([year, posts]) => (
+							<section class="space-y-3" aria-labelledby={`year-${year}`}>
+								<h2
+									id={`year-${year}`}
+									class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500"
+								>
+									{year}
+								</h2>
+								<ul class="space-y-2 text-sm">
+									{
+										posts.map((post) => (
+											<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+												<span class="w-24 shrink-0 text-xs text-zinc-400">
+													<FormattedDate date={post.data.pubDate} />
+												</span>
+												<a
+													href={`/blog/${post.id}/`}
+													class="flex-1 text-zinc-900 no-underline hover:underline"
+												>
+													{post.data.title}
+												</a>
+											</li>
+										))
+									}
+								</ul>
+							</section>
+						))
+					}
+				</div>
 
-				{
-					view === 'categories' && (
-						<div class="space-y-8">
-							{
-								visibleCategoryGroups.map(([name, posts]) => (
-									<section
-										class="space-y-3"
-										aria-labelledby={`category-${name}`}
-									>
-										<h2
-											id={`category-${name}`}
-											class="text-sm font-semibold text-zinc-900"
-										>
-											{name}
-											<span class="ml-2 text-xs font-normal text-zinc-400">
-												{posts.length} post{posts.length === 1 ? '' : 's'}
-											</span>
-										</h2>
-										<ul class="space-y-2 text-sm">
-											{
-												posts.map((post) => (
-													<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-														<span class="w-24 shrink-0 text-xs text-zinc-400">
-															<FormattedDate date={post.data.pubDate} />
-														</span>
-														<a
-															href={`/blog/${post.id}/`}
-															class="flex-1 text-zinc-900 no-underline hover:underline"
-														>
-															{post.data.title}
-														</a>
-													</li>
-												))
-											}
-										</ul>
-									</section>
-								))
-							}
-						</div>
-					)
-				}
+				<div
+					data-archive-view="categories"
+					class="space-y-8 hidden"
+				>
+					{
+						categoryGroups.map(([name, posts]) => (
+							<section
+								class="space-y-3"
+								aria-labelledby={`category-${name}`}
+								data-category-name={name}
+							>
+								<h2
+									id={`category-${name}`}
+									class="text-sm font-semibold text-zinc-900"
+								>
+									{name}
+									<span class="ml-2 text-xs font-normal text-zinc-400">
+										{posts.length} post{posts.length === 1 ? '' : 's'}
+									</span>
+								</h2>
+								<ul class="space-y-2 text-sm">
+									{
+										posts.map((post) => (
+											<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+												<span class="w-24 shrink-0 text-xs text-zinc-400">
+													<FormattedDate date={post.data.pubDate} />
+												</span>
+												<a
+													href={`/blog/${post.id}/`}
+													class="flex-1 text-zinc-900 no-underline hover:underline"
+												>
+													{post.data.title}
+												</a>
+											</li>
+										))
+									}
+								</ul>
+							</section>
+						))
+					}
+				</div>
 
-				{
-					view === 'tags' && (
-						<div class="space-y-8">
-							{
-								visibleTagGroups.map(([name, posts]) => (
-									<section class="space-y-3" aria-labelledby={`tag-${name}`}>
-										<h2
-											id={`tag-${name}`}
-											class="text-sm font-semibold text-zinc-900"
-										>
-											#{name}
-											<span class="ml-2 text-xs font-normal text-zinc-400">
-												{posts.length} post{posts.length === 1 ? '' : 's'}
-											</span>
-										</h2>
-										<ul class="space-y-2 text-sm">
-											{
-												posts.map((post) => (
-													<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-														<span class="w-24 shrink-0 text-xs text-zinc-400">
-															<FormattedDate date={post.data.pubDate} />
-														</span>
-														<a
-															href={`/blog/${post.id}/`}
-															class="flex-1 text-zinc-900 no-underline hover:underline"
-														>
-															{post.data.title}
-														</a>
-													</li>
-												))
-											}
-										</ul>
-									</section>
-								))
+				<div
+					data-archive-view="tags"
+					class="space-y-8 hidden"
+				>
+					{
+						tagGroups.map(([name, posts]) => (
+							<section
+								class="space-y-3"
+								aria-labelledby={`tag-${name}`}
+								data-tag-name={name}
+							>
+								<h2
+									id={`tag-${name}`}
+									class="text-sm font-semibold text-zinc-900"
+								>
+									#{name}
+									<span class="ml-2 text-xs font-normal text-zinc-400">
+										{posts.length} post{posts.length === 1 ? '' : 's'}
+									</span>
+								</h2>
+								<ul class="space-y-2 text-sm">
+									{
+										posts.map((post) => (
+											<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+												<span class="w-24 shrink-0 text-xs text-zinc-400">
+													<FormattedDate date={post.data.pubDate} />
+												</span>
+												<a
+													href={`/blog/${post.id}/`}
+													class="flex-1 text-zinc-900 no-underline hover:underline"
+												>
+													{post.data.title}
+												</a>
+											</li>
+										))
+									}
+								</ul>
+							</section>
+						))
+					}
+				</div>
+
+				<script>
+					(function () {
+						var params = new URLSearchParams(window.location.search);
+						var view = params.get('view') || 'date';
+						var activeCategory = params.get('category') || '';
+						var activeTag = params.get('tag') || '';
+
+						var views = ['date', 'categories', 'tags'];
+
+						views.forEach(function (name) {
+							var container = document.querySelector(
+								'[data-archive-view=\"' + name + '\"]',
+							);
+							if (!container) return;
+							if (name === view) {
+								container.classList.remove('hidden');
+							} else {
+								container.classList.add('hidden');
 							}
-						</div>
-					)
-				}
+						});
+
+						views.forEach(function (name) {
+							var pill = document.querySelector(
+								'[data-archive-pill=\"' + name + '\"]',
+							);
+							if (!pill) return;
+							var isActive =
+								name === view ||
+								(!params.get('view') && name === 'date');
+							pill.classList.toggle('border-zinc-900', isActive);
+							pill.classList.toggle('bg-zinc-900', isActive);
+							pill.classList.toggle('text-zinc-50', isActive);
+							pill.classList.toggle('border-zinc-200', !isActive);
+							pill.classList.toggle('bg-white/70', !isActive);
+						});
+
+						if (view === 'categories' && activeCategory) {
+							document
+								.querySelectorAll('[data-category-name]')
+								.forEach(function (section) {
+									if (
+										section.dataset.categoryName === activeCategory
+									) {
+										section.classList.remove('hidden');
+									} else {
+										section.classList.add('hidden');
+									}
+								});
+						}
+
+						if (view === 'tags' && activeTag) {
+							document
+								.querySelectorAll('[data-tag-name]')
+								.forEach(function (section) {
+									if (section.dataset.tagName === activeTag) {
+										section.classList.remove('hidden');
+									} else {
+										section.classList.add('hidden');
+									}
+								});
+						}
+					})();
+				</script>
 			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
-
