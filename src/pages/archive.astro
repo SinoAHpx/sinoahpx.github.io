@@ -29,7 +29,8 @@ function groupByKey(posts: Post[], key: 'tags' | 'categories') {
 	const groups = new Map<string, Post[]>();
 
 	for (const post of posts) {
-		const values = post.data[key] ?? [];
+		const values =
+			key === 'tags' ? post.data.tags ?? [] : post.data.categories ?? [];
 		for (const value of values) {
 			const trimmed = value.trim();
 			if (!trimmed) continue;
@@ -253,9 +254,10 @@ const tagGroups = groupByKey(allPosts, 'tags');
 							document
 								.querySelectorAll('[data-category-name]')
 								.forEach(function (section) {
-									if (
-										section.dataset.categoryName === activeCategory
-									) {
+									var name = section.getAttribute(
+										'data-category-name',
+									);
+									if (name === activeCategory) {
 										section.classList.remove('hidden');
 									} else {
 										section.classList.add('hidden');
@@ -267,7 +269,8 @@ const tagGroups = groupByKey(allPosts, 'tags');
 							document
 								.querySelectorAll('[data-tag-name]')
 								.forEach(function (section) {
-									if (section.dataset.tagName === activeTag) {
+									var name = section.getAttribute('data-tag-name');
+									if (name === activeTag) {
 										section.classList.remove('hidden');
 									} else {
 										section.classList.add('hidden');
