@@ -30,4 +30,13 @@ const blog = defineCollection({
 		}),
 });
 
-export const collections = { blog };
+// Generic content pages (e.g. /about) live in `src/content/pages`.
+const pages = defineCollection({
+	loader: glob({ base: './src/content/pages', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string().optional(),
+	}),
+});
+
+export const collections = { blog, pages };

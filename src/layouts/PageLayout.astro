@@ -1,0 +1,48 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description } = Astro.props as Props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description ?? title} />
+	</head>
+
+	<body>
+		<Header />
+		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
+			<article
+				class="overflow-hidden rounded-xl border border-zinc-200 bg-white/80"
+			>
+				<div
+					class="prose prose-zinc max-w-none px-6 pb-8 pt-6 text-sm leading-relaxed"
+				>
+					<header class="mb-6 text-center not-prose">
+						<h1 class="mb-2 text-2xl font-semibold tracking-tight text-zinc-900">
+							{title}
+						</h1>
+						{
+							description && (
+								<p class="mt-2 text-sm text-zinc-600">
+									{description}
+								</p>
+							)
+						}
+					</header>
+
+					<slot />
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
