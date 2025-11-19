@@ -63,12 +63,25 @@ const {
 									)
 								}
 							</span>
+						</div>
+					</header>
+					<slot />
+
+					<footer
+						class="mt-8 flex flex-wrap items-center justify-between border-t border-zinc-200 pt-4 text-xs text-zinc-400 not-prose"
+					>
+						<span class="whitespace-nowrap">
+							<FormattedDate date={pubDate} />
+						</span>
+						<div
+							class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-right"
+						>
 							{categories.map((category) => (
 								<a
 									href={`/archive/categories/${encodeURIComponent(
 										category,
 									)}/`}
-									class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-[0.7rem] font-medium text-zinc-600 no-underline hover:border-zinc-300 hover:text-zinc-900"
+									class="text-zinc-500 no-underline hover:text-zinc-900 hover:underline"
 								>
 									{category}
 								</a>
@@ -76,14 +89,13 @@ const {
 							{tags.map((tag) => (
 								<a
 									href={`/archive/tags/${encodeURIComponent(tag)}/`}
-									class="inline-flex items-center rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-[0.7rem] font-medium text-zinc-600 no-underline hover:border-zinc-300 hover:text-zinc-900"
+									class="text-zinc-500 no-underline hover:text-zinc-900 hover:underline"
 								>
 									#{tag}
 								</a>
 							))}
 						</div>
-					</header>
-					<slot />
+					</footer>
 				</div>
 			</article>
 		</main>
