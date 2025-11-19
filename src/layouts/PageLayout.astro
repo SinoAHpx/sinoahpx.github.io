@@ -2,13 +2,15 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 
 interface Props {
 	title: string;
 	description?: string;
+	date: Date;
 }
 
-const { title, description } = Astro.props as Props;
+const { title, description, date } = Astro.props as Props;
 ---
 
 <html lang="en">
@@ -36,13 +38,21 @@ const { title, description } = Astro.props as Props;
 								</p>
 							)
 						}
+						<p class="mt-2 text-xs text-zinc-400">
+							<FormattedDate date={date} />
+						</p>
 					</header>
 
 					<slot />
+
+					<footer
+						class="mt-8 border-t border-zinc-200 pt-4 text-right text-xs text-zinc-400 not-prose"
+					>
+						<FormattedDate date={date} />
+					</footer>
 				</div>
 			</article>
 		</main>
 		<Footer />
 	</body>
 </html>
-

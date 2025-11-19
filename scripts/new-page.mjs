@@ -35,10 +35,12 @@ if (fs.existsSync(filePath)) {
 }
 
 const safeTitle = title.replace(/"/g, '\\"');
+const today = new Date().toISOString().slice(0, 10);
 
 const content = `---
 title: "${safeTitle}"
 description: "Short description of the page."
+date: ${today}
 route: "/${slug}"
 navLabel: "${safeTitle}"
 navOrder: 0

@@ -1,6 +1,7 @@
 ---
 title: About Me
 description: Lorem ipsum dolor sit amet
+date: 2025-11-19
 route: "/about"
 navLabel: "About"
 navOrder: 0

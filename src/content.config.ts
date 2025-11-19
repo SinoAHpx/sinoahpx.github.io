@@ -36,6 +36,7 @@ const pages = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string().optional(),
+		date: z.coerce.date(),
 		// Route where this page should be mounted, e.g. "/about".
 		route: z.string().optional(),
 		// Text label for header navigation; falls back to title when omitted.
