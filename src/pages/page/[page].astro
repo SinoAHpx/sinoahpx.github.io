@@ -15,6 +15,16 @@ type Props = {
 	posts: Post[];
 };
 
+function formatCategoriesAndTags(post: Post) {
+	const categories = post.data.categories ?? [];
+	const tags = post.data.tags ?? [];
+	const parts = [
+		...categories,
+		...tags.map((tag) => `#${tag}`),
+	];
+	return parts.join(' / ');
+}
+
 export async function getStaticPaths() {
 	const allPosts = (await getCollection('blog')).sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -78,12 +88,19 @@ const { page, totalPages, posts } = Astro.props as Props;
 									<h2 class="mb-1 text-base font-semibold leading-snug text-zinc-900">
 										{post.data.title}
 									</h2>
-									<p class="mt-1 text-xs text-zinc-500">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
 									<p class="mt-2 text-sm text-zinc-600">
 										{post.data.description}
 									</p>
+									<div
+										class="mt-4 flex items-center justify-between text-xs text-zinc-400"
+									>
+										<span>
+											<FormattedDate date={post.data.pubDate} />
+										</span>
+										<span class="truncate text-right">
+											{formatCategoriesAndTags(post)}
+										</span>
+									</div>
 								</a>
 							</li>
 						))
