@@ -36,6 +36,14 @@ const pages = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string().optional(),
+		// Route where this page should be mounted, e.g. "/about".
+		route: z.string().optional(),
+		// Text label for header navigation; falls back to title when omitted.
+		navLabel: z.string().optional(),
+		// Sort order for header navigation.
+		navOrder: z.number().optional(),
+		// Whether to show this page in the header navigation.
+		showInNav: z.boolean().optional(),
 	}),
 });
 

@@ -22,12 +22,11 @@ function slugify(value) {
 
 const slug = slugArg ? slugify(slugArg) : slugify(title);
 
-const pagesDir = path.join(process.cwd(), 'src', 'pages');
-const filePath = path.join(pagesDir, `${slug}.astro`);
+const pagesDir = path.join(process.cwd(), 'src', 'content', 'pages');
+const filePath = path.join(pagesDir, `${slug}.md`);
 
 if (!fs.existsSync(pagesDir)) {
-	console.error(`Pages directory not found: ${pagesDir}`);
-	process.exit(1);
+	fs.mkdirSync(pagesDir, { recursive: true });
 }
 
 if (fs.existsSync(filePath)) {
@@ -35,21 +34,21 @@ if (fs.existsSync(filePath)) {
 	process.exit(1);
 }
 
-const today = new Date().toISOString().slice(0, 10);
+const safeTitle = title.replace(/"/g, '\\"');
 
 const content = `---
-import Layout from '../layouts/BlogPost.astro';
+title: "${safeTitle}"
+description: "Short description of the page."
+route: "/${slug}"
+navLabel: "${safeTitle}"
+navOrder: 0
+showInNav: true
 ---
 
-<Layout
-	title="${title.replace(/"/g, '\\"')}"
-	description="Short description of the page."
-	pubDate={new Date('${today}')}
->
-	<p>Write your page content here.</p>
-</Layout>
+# ${title}
+
+Write your page content here.
 `;
 
 fs.writeFileSync(filePath, content, 'utf8');
-console.log(`Created new page: ${filePath}`);
-
+console.log(`Created new page content: ${filePath}`);

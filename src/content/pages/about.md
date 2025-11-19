@@ -1,6 +1,10 @@
 ---
 title: About Me
 description: Lorem ipsum dolor sit amet
+route: "/about"
+navLabel: "About"
+navOrder: 0
+showInNav: true
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -45,4 +49,3 @@ cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum.
 Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero
 volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
 proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-
