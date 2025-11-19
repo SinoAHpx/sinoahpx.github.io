@@ -60,7 +60,7 @@ function formatCategoriesAndTags(post: (typeof posts)[number]) {
 										{post.data.title}
 									</h2>
 									<p class="mt-2 text-sm text-zinc-600">
-										{post.data.description}
+										{post.data.description ?? post.data.title}
 									</p>
 									<div
 										class="mt-4 flex items-center justify-between text-xs text-zinc-400"

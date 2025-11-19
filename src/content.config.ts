@@ -8,7 +8,17 @@ const blog = defineCollection({
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
-			description: z.string(),
+			// Allow description to be omitted or explicitly set to null/empty.
+			// Downstream, this will surface as `string | undefined`.
+			description: z
+				.string()
+				.optional()
+				.nullable()
+				.transform((value) => {
+					if (value == null) return undefined;
+					const trimmed = value.trim();
+					return trimmed === '' ? undefined : trimmed;
+				}),
 			// Transform string to Date object
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
@@ -35,7 +45,17 @@ const pages = defineCollection({
 	loader: glob({ base: './src/content/pages', pattern: '**/*.{md,mdx}' }),
 	schema: z.object({
 		title: z.string(),
-		description: z.string().optional(),
+		// Page descriptions may be omitted or explicitly null/empty.
+		// This will be exposed as `string | undefined`.
+		description: z
+			.string()
+			.optional()
+			.nullable()
+			.transform((value) => {
+				if (value == null) return undefined;
+				const trimmed = value.trim();
+				return trimmed === '' ? undefined : trimmed;
+			}),
 		date: z.coerce.date(),
 		// Route where this page should be mounted, e.g. "/about".
 		route: z.string().optional(),

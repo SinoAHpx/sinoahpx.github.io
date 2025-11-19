@@ -1,6 +1,6 @@
 ---
 title: About Me
-description: Lorem ipsum dolor sit amet
+description:
 date: 2025-11-19
 route: "/about"
 navLabel: "About"
@@ -8,45 +8,9 @@ navOrder: 0
 showInNav: true
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer
-malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas
-pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse
-platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et
-malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam
-phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse
-platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi.
-Dictumst quisque sagittis purus sit amet.
+我是范潇，也叫 Shawn Fan，也常常在互联网上自称 AHpx。
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum
-quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet.
-Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus.
-Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit
-ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt
-dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui
-vivamus arcu felis bibendum.
+目前正在成为一个「全栈产品工程师」，这个名词在现在还比较冷门，但我的愿景是，不仅仅成为一个程序员，而更是从「产品」的角度去决策和思考，我不仅仅是写代码的人，而更是「产品」的构建者，从确定需求、编写文档、设计原型到发布产品、增长营销、社区运营，所有的这一切都令我感到激动无比。
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam
-sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec.
-Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna
-fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique
-et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum.
-Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper
-viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus.
+博客是我写文字的地方，我倾向于多思考，但是我现在输出的内容和观点还不够多。
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut
-consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem
-viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac
-tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac
-tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit
-amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id
-donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
-
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus
-imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu
-cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum.
-Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero
-volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
