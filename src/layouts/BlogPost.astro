@@ -20,6 +20,18 @@ const {
 	tags = [],
 	categories = [],
 } = Astro.props as Props;
+
+// Build combined list of category and tag links for the post footer.
+const metaLinks = [
+	...categories.map((category) => ({
+		href: `/archive/categories/${encodeURIComponent(category)}/`,
+		label: category,
+	})),
+	...tags.map((tag) => ({
+		href: `/archive/tags/${encodeURIComponent(tag)}/`,
+		label: `#${tag}`,
+	})),
+];
 ---
 
 <html lang="en">
@@ -73,26 +85,19 @@ const {
 						<span class="whitespace-nowrap">
 							<FormattedDate date={pubDate} />
 						</span>
-						<div
-							class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-right"
-						>
-							{categories.map((category) => (
-								<a
-									href={`/archive/categories/${encodeURIComponent(
-										category,
-									)}/`}
-									class="text-zinc-500 no-underline hover:text-zinc-900 hover:underline"
-								>
-									{category}
-								</a>
-							))}
-							{tags.map((tag) => (
-								<a
-									href={`/archive/tags/${encodeURIComponent(tag)}/`}
-									class="text-zinc-500 no-underline hover:text-zinc-900 hover:underline"
-								>
-									#{tag}
-								</a>
+						<div class="flex flex-wrap justify-end text-right">
+							{metaLinks.map((item, index) => (
+								<>
+									{index > 0 && (
+										<span class="mx-1 text-zinc-400">/</span>
+									)}
+									<a
+										href={item.href}
+										class="text-zinc-500 no-underline hover:text-zinc-900 hover:underline"
+									>
+										{item.label}
+									</a>
+								</>
 							))}
 						</div>
 					</footer>
