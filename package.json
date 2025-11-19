@@ -7,13 +7,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "new:post": "node ./scripts/new-post.mjs",
-    "new:page": "node ./scripts/new-page.mjs"
+    "new": "node ./scripts/new.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.11",
     "@astrojs/rss": "^4.0.13",
     "@astrojs/sitemap": "^3.6.0",
+    "@inquirer/prompts": "^8.0.1",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.9",
     "sharp": "^0.34.3",
