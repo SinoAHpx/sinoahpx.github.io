@@ -1,0 +1,56 @@
+---
+import { GISCUS } from '../consts';
+
+const {
+	repo,
+	repoId,
+	category,
+	categoryId,
+	mapping = 'pathname',
+	strict = '0',
+	reactionsEnabled = '1',
+	emitMetadata = '0',
+	inputPosition = 'top',
+	theme = 'light',
+	lang = 'en',
+} = GISCUS;
+
+const isConfigured = Boolean(repo && repoId && category && categoryId);
+const showPlaceholder = import.meta.env.DEV && !isConfigured;
+---
+
+{
+	isConfigured && (
+		<section class="mt-8" aria-label="Comments">
+			<div class="rounded-xl border border-zinc-200 bg-white/80 px-6 py-6">
+				<script
+					src="https://giscus.app/client.js"
+					data-repo={repo}
+					data-repo-id={repoId}
+					data-category={category}
+					data-category-id={categoryId}
+					data-mapping={mapping}
+					data-strict={strict}
+					data-reactions-enabled={reactionsEnabled}
+					data-emit-metadata={emitMetadata}
+					data-input-position={inputPosition}
+					data-theme={theme}
+					data-lang={lang}
+					data-loading="lazy"
+					crossorigin="anonymous"
+					async
+				></script>
+			</div>
+		</section>
+	)
+}
+{
+	showPlaceholder && (
+		<section class="mt-8" aria-label="Comments placeholder">
+			<div class="rounded-xl border border-dashed border-zinc-300 bg-white/60 px-6 py-6 text-sm text-zinc-500">
+				Giscus is not configured yet. Add repo and category IDs in
+				<code>src/consts.ts</code>.
+			</div>
+		</section>
+	)
+}
