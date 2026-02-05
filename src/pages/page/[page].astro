@@ -110,29 +110,31 @@ const { page, totalPages, posts } = Astro.props as Props;
 				{
 					totalPages > 1 && (
 						<nav
-							class="mt-10 flex items-center justify-between text-xs text-zinc-500"
+							class="mt-10 grid grid-cols-3 items-center text-xs text-zinc-500"
 						>
-							<a
-								class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900"
-								href={page === 2 ? '/' : `/page/${page - 1}/`}
-							>
-								← Newer posts
-							</a>
-
-							<span class="flex-1 text-center">
-								Page {page} of {totalPages}
-							</span>
-
-							{page < totalPages ? (
+							<div>
 								<a
 									class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900"
-									href={`/page/${page + 1}/`}
+									href={page === 2 ? '/' : `/page/${page - 1}/`}
 								>
-									Older posts →
+									← Newer posts
 								</a>
-							) : (
-								<span />
-							)}
+							</div>
+
+							<div class="text-center">Page {page} of {totalPages}</div>
+
+							<div class="text-right">
+								{page < totalPages ? (
+									<a
+										class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900"
+										href={`/page/${page + 1}/`}
+									>
+										Older posts →
+									</a>
+								) : (
+									<span aria-hidden="true" />
+								)}
+							</div>
 						</nav>
 					)
 				}
