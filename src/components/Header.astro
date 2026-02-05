@@ -24,15 +24,15 @@ const navPages = pages
 	>
 		<a
 			href="/"
-			class="text-3xl font-semibold uppercase tracking-[0.18em] text-zinc-900 no-underline"
+			class="text-3xl font-semibold uppercase tracking-[0.18em] text-zinc-900 no-underline dark:text-zinc-100"
 		>
 			{SITE_TITLE}
 		</a>
-		<p class="mt-3 max-w-2xl text-sm text-zinc-500">
+		<p class="mt-3 max-w-2xl text-sm text-zinc-500 dark:text-zinc-400">
 			Building, shipping, iterating.
 		</p>
 		<nav
-			class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500"
+			class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400"
 		>
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/archive">Archive</HeaderLink>
@@ -41,6 +41,95 @@ const navPages = pages
 					<HeaderLink href={page.href}>{page.label}</HeaderLink>
 				))
 			}
+			<button
+				id="theme-toggle"
+				type="button"
+				class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 transition hover:border-zinc-300 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400 dark:border-zinc-700 dark:bg-[#323742]/70 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100 dark:focus-visible:outline-zinc-500"
+				aria-label="Toggle theme"
+			>
+				<span class="dark:hidden">Dark</span>
+				<span class="hidden dark:inline">Light</span>
+			</button>
 		</nav>
 	</div>
 </header>
+
+<script is:inline>
+	(() => {
+		const storageKey = 'theme';
+		const root = document.documentElement;
+		const button = document.getElementById('theme-toggle');
+
+		if (!(button instanceof HTMLButtonElement)) return;
+
+		const getStoredTheme = () => {
+			try {
+				return localStorage.getItem(storageKey);
+			} catch {
+				return null;
+			}
+		};
+
+		const setStoredTheme = (theme) => {
+			try {
+				localStorage.setItem(storageKey, theme);
+			} catch {
+				// Ignore write errors (private mode, blocked storage, etc.)
+			}
+		};
+
+			const syncGiscus = (isDark) => {
+				const iframe = document.querySelector('iframe.giscus-frame');
+				if (!(iframe instanceof HTMLIFrameElement)) return;
+
+				const message = {
+					giscus: { setConfig: { theme: isDark ? 'dark' : 'light' } },
+				};
+
+				iframe.contentWindow?.postMessage(message, 'https://giscus.app');
+
+				// In case the iframe isn't ready to receive messages yet.
+				iframe.addEventListener(
+					'load',
+					() => iframe.contentWindow?.postMessage(message, 'https://giscus.app'),
+					{ once: true },
+				);
+			};
+
+		const applyTheme = (theme, { persist } = { persist: false }) => {
+			const isDark = theme === 'dark';
+			root.classList.toggle('dark', isDark);
+			root.style.colorScheme = isDark ? 'dark' : 'light';
+			button.setAttribute('aria-pressed', String(isDark));
+
+			if (persist) setStoredTheme(theme);
+			syncGiscus(isDark);
+		};
+
+		// Initialize pressed state and sync embedded widgets (like Giscus).
+		const initialIsDark = root.classList.contains('dark');
+		button.setAttribute('aria-pressed', String(initialIsDark));
+		syncGiscus(initialIsDark);
+
+		button.addEventListener('click', () => {
+			const isDark = root.classList.contains('dark');
+			applyTheme(isDark ? 'light' : 'dark', { persist: true });
+		});
+
+		// If the user hasn't set a preference, keep in sync with system changes.
+		const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
+		mql?.addEventListener?.('change', (event) => {
+			if (getStoredTheme() !== null) return;
+			applyTheme(event.matches ? 'dark' : 'light');
+		});
+
+		// Giscus injects its iframe later; watch the DOM so we can sync once it exists.
+		const observer = new MutationObserver(() => {
+			const iframe = document.querySelector('iframe.giscus-frame');
+			if (!iframe) return;
+			observer.disconnect();
+			syncGiscus(root.classList.contains('dark'));
+		});
+		observer.observe(document.documentElement, { childList: true, subtree: true });
+	})();
+</script>

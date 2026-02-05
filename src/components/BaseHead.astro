@@ -20,6 +20,32 @@ const { title, description, image } = Astro.props as Props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Prevent theme flash by setting the `dark` class before the page renders. -->
+<script is:inline>
+	(() => {
+		const storageKey = 'theme';
+		const root = document.documentElement;
+
+		const getStoredTheme = () => {
+			try {
+				return localStorage.getItem(storageKey);
+			} catch {
+				return null;
+			}
+		};
+
+		const stored = getStoredTheme();
+		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)')
+			?.matches;
+		const isDark = stored ? stored === 'dark' : Boolean(prefersDark);
+
+		root.classList.toggle('dark', isDark);
+		// Hint built-in UI (form controls, scrollbars) to match the theme.
+		root.style.colorScheme = isDark ? 'dark' : 'light';
+	})();
+</script>
+
 <link rel="icon" type="image/png" href={icon.src} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link

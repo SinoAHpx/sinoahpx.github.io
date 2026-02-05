@@ -72,7 +72,7 @@ const { page, totalPages, posts } = Astro.props as Props;
 							<li>
 								<a
 									href={`/blog/${post.id}/`}
-									class="block rounded-xl border border-zinc-200 bg-white/80 p-5 no-underline transition hover:border-zinc-300 hover:bg-white"
+									class="block rounded-xl border border-zinc-200 bg-white/80 p-5 no-underline transition hover:border-zinc-300 hover:bg-white dark:border-zinc-700 dark:bg-[#323742]/80 dark:hover:border-zinc-600 dark:hover:bg-[#3a3f4b]"
 								>
 									{post.data.heroImage && (
 										<div class="mb-4 overflow-hidden rounded-lg">
@@ -85,10 +85,10 @@ const { page, totalPages, posts } = Astro.props as Props;
 											/>
 										</div>
 									)}
-									<h2 class="mb-1 text-base font-semibold leading-snug text-zinc-900">
+									<h2 class="mb-1 text-base font-semibold leading-snug text-zinc-900 dark:text-zinc-100">
 										{post.data.title}
 									</h2>
-									<p class="mt-2 text-sm text-zinc-600">
+									<p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
 										{post.data.description ?? post.data.title}
 									</p>
 									<div
@@ -110,11 +110,11 @@ const { page, totalPages, posts } = Astro.props as Props;
 				{
 					totalPages > 1 && (
 						<nav
-							class="mt-10 grid grid-cols-3 items-center text-xs text-zinc-500"
+							class="mt-10 grid grid-cols-3 items-center text-xs text-zinc-500 dark:text-zinc-400"
 						>
 							<div>
 								<a
-									class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900"
+									class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
 									href={page === 2 ? '/' : `/page/${page - 1}/`}
 								>
 									← Newer posts
@@ -126,7 +126,7 @@ const { page, totalPages, posts } = Astro.props as Props;
 							<div class="text-right">
 								{page < totalPages ? (
 									<a
-										class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900"
+										class="no-underline uppercase tracking-[0.18em] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
 										href={`/page/${page + 1}/`}
 									>
 										Older posts →

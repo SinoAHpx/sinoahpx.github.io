@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Use class-based dark mode (toggled by adding `dark` to <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Slightly larger global font sizes */
 @theme {
   --text-xs: 0.8rem;
@@ -12,6 +15,11 @@
 body {
   /* Subtle neutral background, dark text, and smoother text rendering */
   @apply bg-zinc-50 text-zinc-900 antialiased;
+}
+
+html.dark body {
+  background-color: #292c33;
+  @apply text-zinc-100;
 }
 
 /* Let prose content span the full width of its card */
