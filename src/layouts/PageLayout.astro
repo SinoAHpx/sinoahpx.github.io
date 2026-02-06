@@ -44,12 +44,6 @@ const { title, description, date } = Astro.props as Props;
 					</header>
 
 					<slot />
-
-					<footer
-						class="mt-8 border-t border-zinc-200 pt-4 text-right text-xs text-zinc-400 not-prose dark:border-zinc-700 dark:text-zinc-400"
-					>
-						<FormattedDate date={date} />
-					</footer>
 				</div>
 			</article>
 		</main>
