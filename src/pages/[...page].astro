@@ -7,7 +7,7 @@ type PageEntry = CollectionEntry<'pages'>;
 export async function getStaticPaths() {
 	const pages = await getCollection('pages');
 
-	return pages.map((entry) => {
+	return pages.filter((entry) => entry.id !== 'about').map((entry) => {
 		const route = (entry.data.route || `/${entry.id}`).trim();
 		const segments = route.split('/').filter(Boolean);
 		const param = segments.join('/');

@@ -5,7 +5,7 @@ date: 2025-11-19
 route: "/about"
 navLabel: "About"
 navOrder: 0
-showInNav: true
+showInNav: false
 ---
 
 我是范潇，或是 Shawn Fan，也常常在互联网上自称 AHpx。

@@ -1,21 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
-
-const pages = await getCollection('pages');
-
-const navPages = pages
-	.filter((entry) => entry.data.showInNav !== false)
-	.map((entry) => ({
-		href: (entry.data.route || `/${entry.id}`).trim(),
-		label: entry.data.navLabel || entry.data.title,
-		order: entry.data.navOrder ?? 0,
-	}))
-	.sort((a, b) => {
-		if (a.order !== b.order) return a.order - b.order;
-		return a.label.localeCompare(b.label, 'en');
-	});
 ---
 
 <header class="py-16">
@@ -74,19 +59,13 @@ const navPages = pages
 		<p class="mt-3 max-w-2xl text-sm text-zinc-500 dark:text-zinc-400">
 			I read, I create, I experience
 		</p>
-		<nav
-			class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400"
-			>
-				<HeaderLink href="/">Home</HeaderLink>
-				<HeaderLink href="/archive">Archive</HeaderLink>
-				{
-					navPages.map((page) => (
-						<HeaderLink href={page.href}>{page.label}</HeaderLink>
-					))
-				}
-			</nav>
+		<nav class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/posts">Posts</HeaderLink>
+			<HeaderLink href="/archive">Archive</HeaderLink>
+		</nav>
 	</div>
-</header>
+	</header>
 
 <script is:inline>
 	(() => {
