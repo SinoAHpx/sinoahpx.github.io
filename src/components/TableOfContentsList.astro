@@ -1,0 +1,37 @@
+---
+interface TocItem {
+	depth: number;
+	slug: string;
+	text: string;
+	children: TocItem[];
+}
+
+interface Props {
+	items: TocItem[];
+	nested?: boolean;
+}
+
+const { items, nested = false } = Astro.props as Props;
+---
+
+<ul
+	class:list={[
+		nested
+			? 'mt-1 space-y-1 border-l border-zinc-200 pl-3 dark:border-zinc-700'
+			: 'space-y-1',
+	]}
+>
+	{
+		items.map((item) => (
+			<li>
+				<a
+					href={`#${item.slug}`}
+					class="block rounded px-2 py-1 text-sm text-zinc-600 no-underline transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-700/60 dark:hover:text-zinc-100"
+				>
+					{item.text}
+				</a>
+				{item.children.length > 0 && <Astro.self items={item.children} nested />}
+			</li>
+		))
+	}
+</ul>

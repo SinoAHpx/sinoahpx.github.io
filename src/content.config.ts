@@ -37,6 +37,8 @@ const blog = defineCollection({
 					if (!value) return [];
 					return Array.isArray(value) ? value : [value];
 				}),
+			// Whether to show the table of contents sidebar.
+			toc: z.boolean().optional().default(true),
 		}),
 });
 
@@ -65,6 +67,8 @@ const pages = defineCollection({
 		navOrder: z.number().optional(),
 		// Whether to show this page in the header navigation.
 		showInNav: z.boolean().optional(),
+		// Whether to show the table of contents sidebar.
+		toc: z.boolean().optional().default(true),
 	}),
 });
 

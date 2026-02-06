@@ -1,0 +1,66 @@
+---
+import TableOfContentsList from './TableOfContentsList.astro';
+
+interface HeadingLink {
+	depth: number;
+	slug: string;
+	text: string;
+}
+
+interface TocItem extends HeadingLink {
+	children: TocItem[];
+}
+
+interface Props {
+	headings?: HeadingLink[];
+	title?: string;
+}
+
+const { headings = [], title = 'On this page' } = Astro.props as Props;
+
+const normalizedHeadings = headings.filter(
+	(heading) => heading.depth >= 2 && heading.slug.trim().length > 0,
+);
+
+const root: TocItem = {
+	depth: 1,
+	slug: '',
+	text: '',
+	children: [],
+};
+const stack: TocItem[] = [root];
+
+for (const heading of normalizedHeadings) {
+	const item: TocItem = { ...heading, children: [] };
+
+	while (
+		stack.length > 1 &&
+		heading.depth <= stack[stack.length - 1].depth
+	) {
+		stack.pop();
+	}
+
+	stack[stack.length - 1].children.push(item);
+	stack.push(item);
+}
+
+const tocItems = root.children;
+---
+
+{
+	tocItems.length > 0 && (
+		<aside class="hidden lg:block">
+			<nav
+				aria-label={title}
+				class="sticky top-28 rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-zinc-700 dark:bg-[#323742]/80"
+			>
+				<p class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
+					{title}
+				</p>
+				<div class="max-h-[70vh] overflow-y-auto pr-1">
+					<TableOfContentsList items={tocItems} />
+				</div>
+			</nav>
+		</aside>
+	)
+}

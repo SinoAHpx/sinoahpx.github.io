@@ -3,14 +3,24 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+
+interface HeadingLink {
+	depth: number;
+	slug: string;
+	text: string;
+}
 
 interface Props {
 	title: string;
 	description?: string;
 	date: Date;
+	toc?: boolean;
+	headings?: HeadingLink[];
 }
 
-const { title, description, date } = Astro.props as Props;
+const { title, description, date, toc = true, headings = [] } = Astro.props as Props;
+const showToc = toc && headings.length > 0;
 ---
 
 <html lang="en">
@@ -20,32 +30,43 @@ const { title, description, date } = Astro.props as Props;
 
 	<body>
 		<Header />
-		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
-			<article
-				class="overflow-hidden rounded-xl border border-zinc-200 bg-white/80 dark:border-zinc-700 dark:bg-[#323742]/80"
+		<main class="mx-auto max-w-6xl px-4 pb-12 pt-8">
+			<div
+				class:list={[
+					'mx-auto items-start gap-6',
+					showToc
+						? 'max-w-[64rem] lg:grid lg:grid-cols-[minmax(0,48rem)_16rem]'
+						: 'max-w-3xl',
+				]}
 			>
-				<div
-					class="prose prose-zinc dark:prose-invert max-w-none px-6 pb-8 pt-6 text-sm leading-relaxed"
+				<article
+					class="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-zinc-200 bg-white/80 dark:border-zinc-700 dark:bg-[#323742]/80 lg:max-w-none"
 				>
-					<header class="mb-6 text-center not-prose">
-						<h1 class="mb-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-							{title}
-						</h1>
-						{
-							description && (
-								<p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-									{description}
-								</p>
-							)
-						}
-						<p class="mt-2 text-xs text-zinc-400 dark:text-zinc-400">
-							<FormattedDate date={date} />
-						</p>
-					</header>
+					<div
+						class="prose prose-zinc dark:prose-invert max-w-none px-6 pb-8 pt-6 text-sm leading-relaxed"
+					>
+						<header class="mb-6 text-center not-prose">
+							<h1 class="mb-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+								{title}
+							</h1>
+							{
+								description && (
+									<p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+										{description}
+									</p>
+								)
+							}
+							<p class="mt-2 text-xs text-zinc-400 dark:text-zinc-400">
+								<FormattedDate date={date} />
+							</p>
+						</header>
 
-					<slot />
-				</div>
-			</article>
+						<slot />
+					</div>
+				</article>
+
+				{showToc && <TableOfContents headings={headings} />}
+			</div>
 		</main>
 		<Footer />
 	</body>
