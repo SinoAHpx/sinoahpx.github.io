@@ -26,6 +26,8 @@ const { items, nested = false } = Astro.props as Props;
 			<li>
 				<a
 					href={`#${item.slug}`}
+					data-toc-link
+					data-toc-slug={item.slug}
 					class="block rounded px-2 py-1 text-sm text-zinc-600 no-underline transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-700/60 dark:hover:text-zinc-100"
 				>
 					{item.text}

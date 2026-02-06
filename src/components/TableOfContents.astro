@@ -48,19 +48,144 @@ const tocItems = root.children;
 ---
 
 {
-	tocItems.length > 0 && (
-		<aside class="hidden lg:block">
+		tocItems.length > 0 && (
+			<aside class="hidden lg:block lg:self-stretch">
 			<nav
 				aria-label={title}
-				class="sticky top-28 rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-zinc-700 dark:bg-[#323742]/80"
+				data-toc-nav
+				class="sticky top-6 rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-zinc-700 dark:bg-[#323742]/80"
 			>
 				<p class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
 					{title}
 				</p>
-				<div class="max-h-[70vh] overflow-y-auto pr-1">
+				<div data-toc-scroll-root class="max-h-[70vh] overflow-y-auto pr-1">
 					<TableOfContentsList items={tocItems} />
 				</div>
 			</nav>
 		</aside>
 	)
 }
+
+<script is:inline>
+	(() => {
+		const tocNavs = Array.from(document.querySelectorAll('[data-toc-nav]'));
+		if (tocNavs.length === 0) return;
+
+		const ACTIVE_CLASSES = [
+			'bg-zinc-100',
+			'text-zinc-900',
+			'font-medium',
+			'dark:bg-zinc-700/60',
+			'dark:text-zinc-100',
+		];
+
+		for (const tocNav of tocNavs) {
+			const links = Array.from(
+				tocNav.querySelectorAll('a[data-toc-link][data-toc-slug]'),
+			);
+			if (links.length === 0) continue;
+
+			const scrollRoot = tocNav.querySelector('[data-toc-scroll-root]');
+			const items = links
+				.map((link) => {
+					const slug = link.getAttribute('data-toc-slug');
+					if (!slug) return null;
+
+					const section = document.getElementById(slug);
+					if (!section) return null;
+
+					return { slug, link, section };
+				})
+				.filter((item) => item !== null);
+
+			if (items.length === 0) continue;
+
+			let activeSlug = '';
+			let ticking = false;
+
+			const scrollActiveIntoView = (link) => {
+				if (!(scrollRoot instanceof HTMLElement)) return;
+
+				const top = link.offsetTop;
+				const bottom = top + link.offsetHeight;
+				const viewTop = scrollRoot.scrollTop;
+				const viewBottom = viewTop + scrollRoot.clientHeight;
+
+				if (top < viewTop) {
+					scrollRoot.scrollTo({
+						top: Math.max(top - 8, 0),
+						behavior: 'smooth',
+					});
+					return;
+				}
+
+				if (bottom > viewBottom) {
+					scrollRoot.scrollTo({
+						top: bottom - scrollRoot.clientHeight + 8,
+						behavior: 'smooth',
+					});
+				}
+			};
+
+			const setActive = (slug) => {
+				if (!slug || slug === activeSlug) return;
+				activeSlug = slug;
+
+				for (const item of items) {
+					const isActive = item.slug === slug;
+					for (const className of ACTIVE_CLASSES) {
+						item.link.classList.toggle(className, isActive);
+					}
+
+					if (isActive) {
+						item.link.setAttribute('aria-current', 'location');
+						scrollActiveIntoView(item.link);
+					} else {
+						item.link.removeAttribute('aria-current');
+					}
+				}
+			};
+
+			const getHashSlug = () => {
+				if (!window.location.hash) return '';
+				return decodeURIComponent(window.location.hash.slice(1));
+			};
+
+			const getActiveSlug = () => {
+				const hashSlug = getHashSlug();
+				if (hashSlug && items.some((item) => item.slug === hashSlug)) {
+					return hashSlug;
+				}
+
+				const offset = 150;
+				let currentSlug = items[0].slug;
+
+				for (const item of items) {
+					if (item.section.getBoundingClientRect().top - offset <= 0) {
+						currentSlug = item.slug;
+					} else {
+						break;
+					}
+				}
+
+				return currentSlug;
+			};
+
+			const syncActive = () => {
+				ticking = false;
+				setActive(getActiveSlug());
+			};
+
+			const onScroll = () => {
+				if (ticking) return;
+				ticking = true;
+				window.requestAnimationFrame(syncActive);
+			};
+
+			window.addEventListener('scroll', onScroll, { passive: true });
+			window.addEventListener('hashchange', syncActive);
+
+			syncActive();
+		}
+	})();
+</script>
