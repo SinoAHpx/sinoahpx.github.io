@@ -19,6 +19,49 @@ const navPages = pages
 ---
 
 <header class="py-16">
+	<button
+		id="theme-toggle"
+		type="button"
+		class="fixed right-4 top-4 z-50 inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white/80 text-zinc-600 shadow-sm backdrop-blur transition hover:border-zinc-300 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400 dark:border-zinc-700 dark:bg-[#323742]/80 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-100 dark:focus-visible:outline-zinc-500"
+		aria-label="Toggle theme"
+		title="Toggle theme"
+	>
+		<span class="sr-only">Toggle theme</span>
+		<!-- Moon icon (shown in light mode) -->
+		<svg
+			class="h-5 w-5 dark:hidden"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1.8"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"
+		>
+			<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+		</svg>
+		<!-- Sun icon (shown in dark mode) -->
+		<svg
+			class="hidden h-5 w-5 dark:inline"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1.8"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"
+		>
+			<circle cx="12" cy="12" r="4" />
+			<path d="M12 2v2" />
+			<path d="M12 20v2" />
+			<path d="M4.93 4.93l1.41 1.41" />
+			<path d="M17.66 17.66l1.41 1.41" />
+			<path d="M2 12h2" />
+			<path d="M20 12h2" />
+			<path d="M4.93 19.07l1.41-1.41" />
+			<path d="M17.66 6.34l1.41-1.41" />
+		</svg>
+	</button>
 	<div
 		class="mx-auto flex max-w-3xl flex-col items-center px-4 text-center"
 	>
@@ -33,24 +76,15 @@ const navPages = pages
 		</p>
 		<nav
 			class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400"
-		>
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/archive">Archive</HeaderLink>
-			{
-				navPages.map((page) => (
-					<HeaderLink href={page.href}>{page.label}</HeaderLink>
-				))
-			}
-			<button
-				id="theme-toggle"
-				type="button"
-				class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/70 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 transition hover:border-zinc-300 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400 dark:border-zinc-700 dark:bg-[#323742]/70 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100 dark:focus-visible:outline-zinc-500"
-				aria-label="Toggle theme"
 			>
-				<span class="dark:hidden">Dark</span>
-				<span class="hidden dark:inline">Light</span>
-			</button>
-		</nav>
+				<HeaderLink href="/">Home</HeaderLink>
+				<HeaderLink href="/archive">Archive</HeaderLink>
+				{
+					navPages.map((page) => (
+						<HeaderLink href={page.href}>{page.label}</HeaderLink>
+					))
+				}
+			</nav>
 	</div>
 </header>
 
@@ -78,24 +112,6 @@ const navPages = pages
 			}
 		};
 
-			const syncGiscus = (isDark) => {
-				const iframe = document.querySelector('iframe.giscus-frame');
-				if (!(iframe instanceof HTMLIFrameElement)) return;
-
-				const message = {
-					giscus: { setConfig: { theme: isDark ? 'dark' : 'light' } },
-				};
-
-				iframe.contentWindow?.postMessage(message, 'https://giscus.app');
-
-				// In case the iframe isn't ready to receive messages yet.
-				iframe.addEventListener(
-					'load',
-					() => iframe.contentWindow?.postMessage(message, 'https://giscus.app'),
-					{ once: true },
-				);
-			};
-
 		const applyTheme = (theme, { persist } = { persist: false }) => {
 			const isDark = theme === 'dark';
 			root.classList.toggle('dark', isDark);
@@ -103,13 +119,14 @@ const navPages = pages
 			button.setAttribute('aria-pressed', String(isDark));
 
 			if (persist) setStoredTheme(theme);
-			syncGiscus(isDark);
+			window.dispatchEvent(
+				new CustomEvent('theme-change', { detail: { theme } }),
+			);
 		};
 
-		// Initialize pressed state and sync embedded widgets (like Giscus).
+		// Initialize pressed state.
 		const initialIsDark = root.classList.contains('dark');
 		button.setAttribute('aria-pressed', String(initialIsDark));
-		syncGiscus(initialIsDark);
 
 		button.addEventListener('click', () => {
 			const isDark = root.classList.contains('dark');
@@ -123,13 +140,5 @@ const navPages = pages
 			applyTheme(event.matches ? 'dark' : 'light');
 		});
 
-		// Giscus injects its iframe later; watch the DOM so we can sync once it exists.
-		const observer = new MutationObserver(() => {
-			const iframe = document.querySelector('iframe.giscus-frame');
-			if (!iframe) return;
-			observer.disconnect();
-			syncGiscus(root.classList.contains('dark'));
-		});
-		observer.observe(document.documentElement, { childList: true, subtree: true });
 	})();
 </script>

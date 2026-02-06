@@ -11,7 +11,6 @@ const {
 	reactionsEnabled = '1',
 	emitMetadata = '0',
 	inputPosition = 'top',
-	theme = 'light',
 	lang = 'en',
 } = GISCUS;
 
@@ -23,8 +22,8 @@ const showPlaceholder = import.meta.env.DEV && !isConfigured;
 	isConfigured && (
 		<section class="mt-8" aria-label="Comments">
 			<div class="rounded-xl border border-zinc-200 bg-white/80 px-6 py-6 dark:border-zinc-700 dark:bg-[#323742]/80">
-				<script
-					src="https://giscus.app/client.js"
+				<div
+					id="giscus"
 					data-repo={repo}
 					data-repo-id={repoId}
 					data-category={category}
@@ -34,12 +33,90 @@ const showPlaceholder = import.meta.env.DEV && !isConfigured;
 					data-reactions-enabled={reactionsEnabled}
 					data-emit-metadata={emitMetadata}
 					data-input-position={inputPosition}
-					data-theme={theme}
 					data-lang={lang}
 					data-loading="lazy"
-					crossorigin="anonymous"
-					async
-				></script>
+					data-theme-light="light"
+					data-theme-dark="dark"
+				></div>
+
+				<script is:inline>
+					(() => {
+						const container = document.getElementById('giscus');
+						if (!(container instanceof HTMLElement)) return;
+
+						const getTheme = () =>
+							document.documentElement.classList.contains('dark')
+								? 'dark'
+								: 'light';
+
+						// Per giscus Advanced Usage: postMessage({ giscus: message }, 'https://giscus.app')
+						// and update config via { setConfig: { theme } }.
+						const sendMessage = (message) => {
+							const iframe = container.querySelector('iframe.giscus-frame');
+							if (!(iframe instanceof HTMLIFrameElement)) return false;
+
+							const post = () => {
+								iframe.contentWindow?.postMessage(
+									{ giscus: message },
+									'https://giscus.app',
+								);
+							};
+
+							post();
+							// If the iframe isn't ready yet (e.g. browser lazy-load), try again once it loads.
+							iframe.addEventListener('load', post, { once: true });
+							return true;
+						};
+
+						const loadGiscus = (theme) => {
+							// Clear any previous script/iframe so the new theme is applied deterministically.
+							container.innerHTML = '';
+
+							const script = document.createElement('script');
+							script.src = 'https://giscus.app/client.js';
+							script.async = true;
+							script.crossOrigin = 'anonymous';
+
+							script.dataset.repo = container.dataset.repo;
+							script.dataset.repoId = container.dataset.repoId;
+							script.dataset.category = container.dataset.category;
+							script.dataset.categoryId = container.dataset.categoryId;
+							script.dataset.mapping = container.dataset.mapping;
+							script.dataset.strict = container.dataset.strict;
+							script.dataset.reactionsEnabled = container.dataset.reactionsEnabled;
+							script.dataset.emitMetadata = container.dataset.emitMetadata;
+							script.dataset.inputPosition = container.dataset.inputPosition;
+							script.dataset.lang = container.dataset.lang;
+							script.dataset.loading = container.dataset.loading;
+							script.dataset.theme = theme;
+
+							container.appendChild(script);
+						};
+
+						const resolveGiscusTheme = (theme) => {
+							if (theme === 'dark') return container.dataset.themeDark || 'dark';
+							return container.dataset.themeLight || 'light';
+						};
+
+						let lastTheme = resolveGiscusTheme(getTheme());
+						loadGiscus(lastTheme);
+
+						window.addEventListener('theme-change', (event) => {
+							const nextTheme =
+								typeof event?.detail?.theme === 'string'
+									? event.detail.theme
+									: getTheme();
+							const resolved = resolveGiscusTheme(nextTheme);
+							if (resolved === lastTheme) return;
+							lastTheme = resolved;
+
+							// Prefer the official runtime config update message. If the iframe isn't
+							// available yet (lazy loading), reload with the new `data-theme` instead.
+							const didSend = sendMessage({ setConfig: { theme: resolved } });
+							if (!didSend) loadGiscus(resolved);
+						});
+					})();
+				</script>
 			</div>
 		</section>
 	)
