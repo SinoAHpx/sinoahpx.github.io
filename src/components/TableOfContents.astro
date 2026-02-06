@@ -48,17 +48,17 @@ const tocItems = root.children;
 ---
 
 {
-		tocItems.length > 0 && (
-			<aside class="hidden lg:block lg:self-stretch">
+	tocItems.length > 0 && (
+		<aside class="absolute left-full top-0 ml-6 hidden h-full min-[1120px]:block">
 			<nav
 				aria-label={title}
 				data-toc-nav
-				class="sticky top-6 rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-zinc-700 dark:bg-[#323742]/80"
+				class="sticky top-24 w-44"
 			>
-				<p class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
+				<p class="mb-2 text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-400 dark:text-zinc-500">
 					{title}
 				</p>
-				<div data-toc-scroll-root class="max-h-[70vh] overflow-y-auto pr-1">
+				<div data-toc-scroll-root class="max-h-[68vh] overflow-y-auto">
 					<TableOfContentsList items={tocItems} />
 				</div>
 			</nav>
@@ -71,13 +71,7 @@ const tocItems = root.children;
 		const tocNavs = Array.from(document.querySelectorAll('[data-toc-nav]'));
 		if (tocNavs.length === 0) return;
 
-		const ACTIVE_CLASSES = [
-			'bg-zinc-100',
-			'text-zinc-900',
-			'font-medium',
-			'dark:bg-zinc-700/60',
-			'dark:text-zinc-100',
-		];
+		const ACTIVE_CLASSES = ['text-zinc-800', 'font-medium', 'dark:text-zinc-100'];
 
 		for (const tocNav of tocNavs) {
 			const links = Array.from(
@@ -112,16 +106,13 @@ const tocItems = root.children;
 				const viewBottom = viewTop + scrollRoot.clientHeight;
 
 				if (top < viewTop) {
-					scrollRoot.scrollTo({
-						top: Math.max(top - 8, 0),
-						behavior: 'smooth',
-					});
+					scrollRoot.scrollTo({ top: Math.max(top - 6, 0), behavior: 'smooth' });
 					return;
 				}
 
 				if (bottom > viewBottom) {
 					scrollRoot.scrollTo({
-						top: bottom - scrollRoot.clientHeight + 8,
+						top: bottom - scrollRoot.clientHeight + 6,
 						behavior: 'smooth',
 					});
 				}
