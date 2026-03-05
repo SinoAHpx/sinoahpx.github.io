@@ -3,7 +3,7 @@ title: "从小镇青年到 AI Native 探索者：我的十问十答"
 description: "记录我对产品、成长、审美、边界与人生叙事的十个回答"
 pubDate: 2026-03-05 16:54:10
 tags: ["ai-agent", "second-brain", "indie-hacker", "gap-year", "personal-branding"]
-categories: ["Personal", "AI", "Reflection"]
+categories: ["AI"]
 ---
 
 # 从小镇青年到 AI Native 探索者：我的十问十答
