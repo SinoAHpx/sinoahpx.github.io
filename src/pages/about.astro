@@ -1,23 +1,37 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
-<PageLayout title="关于我">
-	<p>
-		我是范潇，或是 Shawn Fan，也常常在互联网上自称 AHpx。
-	</p>
-	<p>
-		目前正在成为一个「全栈产品工程师」，这个名词在现在还比较冷门，但我的愿景是，不仅仅成为一个程序员，而更是从「产品」的角度去决策和思考，我不仅仅是写代码的人，而更是「产品」的构建者，从确定需求、编写文档、设计原型到发布产品、增长营销、社区运营，所有的这一切都令我感到激动无比。
-	</p>
-	<p>
-		博客是我写文字的地方，我倾向于多思考，但是我现在输出的内容和观点还不够多。现在你所见的这个博客是在 2025 年 11 月 我用 Astro 全新构建的，希望比起之前的 Hexo 老博客，我能够在这里写下更多的思考。
-	</p>
-	<p>你可以在以下地方找到我：</p>
-	<ul>
-		<li><a href="https://github.com/ahpxex">GitHub</a></li>
-		<li><a href="https://twitter.com/ahpxex">Twitter</a></li>
-		<li>
-			<a href="https://www.linkedin.com/in/shawn-fan-204468252/">LinkedIn</a>
-		</li>
-	</ul>
-</PageLayout>
+<html lang="en">
+	<head>
+		<BaseHead title={`关于 -- ${SITE_TITLE}`} description="关于我" />
+	</head>
+
+	<body>
+		<Header />
+		<main class="mx-auto max-w-2xl px-4 pb-12">
+			<article class="space-y-6 text-base leading-[1.9] text-ink dark:text-ink-dark">
+				<p>
+					我是范潇，或是 Shawn Fan，也常常在互联网上自称 AHpx。
+				</p>
+				<p>
+					目前正在成为一个「全栈产品工程师」，这个名词在现在还比较冷门，但我的愿景是，不仅仅成为一个程序员，而更是从「产品」的角度去决策和思考，我不仅仅是写代码的人，而更是「产品」的构建者，从确定需求、编写文档、设计原型到发布产品、增长营销、社区运营，所有的这一切都令我感到激动无比。
+				</p>
+				<p>
+					博客是我写文字的地方，我倾向于多思考，但是我现在输出的内容和观点还不够多。现在你所见的这个博客是在 2025 年 11 月 我用 Astro 全新构建的，希望比起之前的 Hexo 老博客，我能够在这里写下更多的思考。
+				</p>
+				<p class="text-ink-light dark:text-ink-light-dark">
+					你可以在这些地方找到我：<a href="https://github.com/ahpxex" class="text-ink no-underline hover:underline dark:text-ink-dark">GitHub</a>
+					<span class="mx-1 text-ink-faint dark:text-ink-faint-dark">/</span>
+					<a href="https://twitter.com/ahpxex" class="text-ink no-underline hover:underline dark:text-ink-dark">Twitter</a>
+					<span class="mx-1 text-ink-faint dark:text-ink-faint-dark">/</span>
+					<a href="https://www.linkedin.com/in/shawn-fan-204468252/" class="text-ink no-underline hover:underline dark:text-ink-dark">LinkedIn</a>
+				</p>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
