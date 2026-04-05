@@ -14,12 +14,13 @@ interface HeadingLink {
 interface Props {
 	title: string;
 	description?: string;
-	date: Date;
+	date?: Date;
+	showDate?: boolean;
 	toc?: boolean;
 	headings?: HeadingLink[];
 }
 
-const { title, description, date, toc = true, headings = [] } = Astro.props as Props;
+const { title, description, date, showDate = false, toc = true, headings = [] } = Astro.props as Props;
 const showToc = toc && headings.length > 0;
 ---
 
@@ -30,26 +31,30 @@ const showToc = toc && headings.length > 0;
 
 	<body>
 		<Header />
-		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
+		<main class="mx-auto max-w-2xl px-4 pb-12">
 			<div class="relative">
 				<article>
 					<div
-						class="prose prose-zinc dark:prose-invert max-w-none pb-8 pt-2 text-sm leading-relaxed"
+						class="prose prose-zinc dark:prose-invert max-w-none pb-8 text-sm leading-relaxed"
 					>
-						<header class="mb-8 not-prose">
-							<h1 class="mb-2 text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
+						<header class="mb-10 not-prose">
+							<h1 class="text-2xl leading-snug text-ink dark:text-ink-dark">
 								{title}
 							</h1>
 							{
 								description && (
-									<p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+									<p class="mt-3 text-sm text-ink-light dark:text-ink-light-dark">
 										{description}
 									</p>
 								)
 							}
-							<p class="mt-3 font-sans text-xs text-zinc-400 dark:text-zinc-500">
-								<FormattedDate date={date} />
-							</p>
+							{
+								showDate && date && (
+									<p class="mt-3 font-sans text-xs text-ink-faint dark:text-ink-faint-dark">
+										<FormattedDate date={date} />
+									</p>
+								)
+							}
 						</header>
 
 						<slot />

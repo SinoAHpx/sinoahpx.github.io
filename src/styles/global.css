@@ -4,25 +4,49 @@
 /* Use class-based dark mode (toggled by adding `dark` to <html>). */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Slightly larger global font sizes */
 @theme {
   --text-xs: 0.8rem;
   --text-sm: 0.95rem;
   --text-base: 1.05rem;
+
+  /* Warm ink-on-paper palette */
+  --color-paper: #f8f5f0;
+  --color-ink: #2c2824;
+  --color-ink-light: #8a8178;
+  --color-ink-faint: #b8b0a6;
+
+  --color-paper-dark: #1a1816;
+  --color-ink-dark: #e4dfd8;
+  --color-ink-light-dark: #7a7268;
+  --color-ink-faint-dark: #4a4440;
 }
 
 /* Base site styles */
 body {
   font-family: 'LXGW WenKai TC', 'Atkinson Hyperlegible', ui-serif, Georgia, serif;
-  @apply bg-white text-zinc-900 antialiased;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  @apply antialiased;
 }
 
 html.dark body {
-  background-color: #1a1a1a;
-  @apply text-zinc-100;
+  background-color: var(--color-paper-dark);
+  color: var(--color-ink-dark);
 }
 
 /* Let prose content span the full width of its card */
 .prose {
   max-width: none;
+}
+
+/* Generous Chinese typographic rhythm */
+.prose p,
+.prose li {
+  line-height: 1.9;
+}
+
+/* Prose link styling: subtle underline */
+.prose a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }

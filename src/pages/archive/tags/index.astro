@@ -7,15 +7,12 @@ import Header from '../../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
 
 type Post = CollectionEntry<'blog'>;
-
 const allPosts = await getCollection('blog');
 
 function groupByTag(posts: Post[]) {
 	const groups = new Map<string, Post[]>();
-
 	for (const post of posts) {
-		const tags = post.data.tags ?? [];
-		for (const tag of tags) {
+		for (const tag of post.data.tags ?? []) {
 			const trimmed = tag.trim();
 			if (!trimmed) continue;
 			const list = groups.get(trimmed) ?? [];
@@ -23,10 +20,7 @@ function groupByTag(posts: Post[]) {
 			groups.set(trimmed, list);
 		}
 	}
-
-	return Array.from(groups.entries()).sort(([a], [b]) =>
-		a.localeCompare(b, 'en'),
-	);
+	return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b, 'en'));
 }
 
 const tagGroups = groupByTag(allPosts);
@@ -36,102 +30,42 @@ const currentView: 'date' | 'categories' | 'tags' = 'tags';
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead
-			title={`Archive -- Tags -- ${SITE_TITLE}`}
-			description={SITE_DESCRIPTION}
-		/>
+		<BaseHead title={`归档 -- 标签 -- ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
-		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
-			<section class="space-y-8">
-				<header class="space-y-3">
-					<h1 class="text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
-						Archive
-					</h1>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400">
-						Browse posts by tag.
-					</p>
-
-					<nav class="mt-4 flex gap-4 font-sans text-xs font-medium uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500">
-						<a
-							href="/archive/"
-							class:list={[
-								'no-underline transition',
-								currentView === 'date'
-									? 'text-zinc-900 dark:text-zinc-100'
-									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
-							]}
-						>
-							Date
-						</a>
-						<a
-							href="/archive/categories/"
-							class:list={[
-								'no-underline transition',
-								currentView === 'categories'
-									? 'text-zinc-900 dark:text-zinc-100'
-									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
-							]}
-						>
-							Categories
-						</a>
-						<a
-							href="/archive/tags/"
-							class:list={[
-								'no-underline transition',
-								currentView === 'tags'
-									? 'text-zinc-900 dark:text-zinc-100'
-									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
-							]}
-						>
-							Tags
-						</a>
+		<main class="mx-auto max-w-2xl px-4 pb-12">
+			<section class="space-y-10">
+				<header>
+					<h1 class="text-2xl text-ink dark:text-ink-dark">归档</h1>
+					<nav class="mt-6 flex gap-6 font-sans text-sm text-ink-light dark:text-ink-light-dark">
+						<a href="/archive/" class:list={['no-underline', currentView === 'date' ? 'text-ink dark:text-ink-dark' : 'hover:text-ink dark:hover:text-ink-dark']}>按时间</a>
+						<a href="/archive/categories/" class:list={['no-underline', currentView === 'categories' ? 'text-ink dark:text-ink-dark' : 'hover:text-ink dark:hover:text-ink-dark']}>按分类</a>
+						<a href="/archive/tags/" class:list={['no-underline', currentView === 'tags' ? 'text-ink dark:text-ink-dark' : 'hover:text-ink dark:hover:text-ink-dark']}>按标签</a>
 					</nav>
 				</header>
 
-				<div class="space-y-8">
-					{
-						tagGroups.map(([name, posts]) => (
-							<section
-								class="space-y-3"
-								aria-labelledby={`tag-${name}`}
-							>
-								<h2
-									id={`tag-${name}`}
-									class="text-sm font-normal text-zinc-900 dark:text-zinc-100"
-								>
-									#{name}
-									<span class="ml-2 font-sans text-xs text-zinc-400 dark:text-zinc-500">
-										{posts.length} post{posts.length === 1 ? '' : 's'}
-									</span>
-								</h2>
-								<ul class="space-y-2 text-sm">
-									{
-										posts
-											.sort(
-												(a, b) =>
-													b.data.pubDate.valueOf() -
-													a.data.pubDate.valueOf(),
-											)
-											.map((post) => (
-												<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-													<span class="w-24 shrink-0 font-sans text-xs text-zinc-400 dark:text-zinc-500">
-														<FormattedDate date={post.data.pubDate} />
-													</span>
-													<a
-														href={`/posts/${post.id}/`}
-														class="flex-1 text-zinc-900 no-underline hover:underline dark:text-zinc-100"
-													>
-														{post.data.title}
-													</a>
-												</li>
-											))
-									}
-								</ul>
-							</section>
-						))
-					}
+				<div class="space-y-10">
+					{tagGroups.map(([name, posts]) => (
+						<section class="space-y-3" aria-labelledby={`tag-${name}`}>
+							<h2 id={`tag-${name}`} class="text-sm text-ink dark:text-ink-dark">
+								#{name}
+								<span class="ml-2 font-sans text-xs text-ink-faint dark:text-ink-faint-dark">{posts.length}</span>
+							</h2>
+							<ul class="space-y-2 text-sm">
+								{posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).map((post) => (
+									<li class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+										<span class="w-24 shrink-0 font-sans text-xs text-ink-faint dark:text-ink-faint-dark">
+											<FormattedDate date={post.data.pubDate} />
+										</span>
+										<a href={`/posts/${post.id}/`} class="flex-1 text-ink no-underline hover:underline dark:text-ink-dark">
+											{post.data.title}
+										</a>
+									</li>
+								))}
+							</ul>
+						</section>
+					))}
 				</div>
 			</section>
 		</main>

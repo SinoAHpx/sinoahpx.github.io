@@ -11,7 +11,6 @@ type Post = CollectionEntry<'blog'>;
 export async function getStaticPaths() {
 	const allPosts = await getCollection('blog');
 	const categories = new Set<string>();
-
 	for (const post of allPosts) {
 		for (const category of post.data.categories ?? []) {
 			const trimmed = category.trim();
@@ -19,25 +18,17 @@ export async function getStaticPaths() {
 			categories.add(trimmed);
 		}
 	}
-
 	return Array.from(categories).map((category) => ({
 		params: { category },
 		props: { category },
 	}));
 }
 
-type Props = {
-	category: string;
-};
-
+type Props = { category: string };
 const { category } = Astro.props as Props;
 
 const posts = (await getCollection('blog'))
-	.filter((post) =>
-		(post.data.categories ?? []).some(
-			(c) => c.trim() === category,
-		),
-	)
+	.filter((post) => (post.data.categories ?? []).some((c) => c.trim() === category))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const currentView: 'date' | 'categories' | 'tags' = 'categories';
@@ -46,84 +37,40 @@ const currentView: 'date' | 'categories' | 'tags' = 'categories';
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead
-			title={`Archive -- Category: ${category} -- ${SITE_TITLE}`}
-			description={SITE_DESCRIPTION}
-		/>
+		<BaseHead title={`归档 -- ${category} -- ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
-		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
-			<section class="space-y-8">
-				<header class="space-y-3">
-					<h1 class="text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
-						Archive
-					</h1>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400">
-						Browse posts in category{' '}
-						<span class="text-zinc-900 dark:text-zinc-100">{category}</span>.
+		<main class="mx-auto max-w-2xl px-4 pb-12">
+			<section class="space-y-10">
+				<header>
+					<h1 class="text-2xl text-ink dark:text-ink-dark">归档</h1>
+					<p class="mt-3 text-sm text-ink-light dark:text-ink-light-dark">
+						分类：<span class="text-ink dark:text-ink-dark">{category}</span>
 					</p>
-
-					<nav class="mt-4 flex gap-4 font-sans text-xs font-medium uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500">
-						<a
-							href="/archive/"
-							class:list={[
-								'no-underline transition',
-								currentView === 'date'
-									? 'text-zinc-900 dark:text-zinc-100'
-									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
-							]}
-						>
-							Date
-						</a>
-						<a
-							href="/archive/categories/"
-							class:list={[
-								'no-underline transition',
-								currentView === 'categories'
-									? 'text-zinc-900 dark:text-zinc-100'
-									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
-							]}
-						>
-							Categories
-						</a>
-						<a
-							href="/archive/tags/"
-							class:list={[
-								'no-underline transition',
-								currentView === 'tags'
-									? 'text-zinc-900 dark:text-zinc-100'
-									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
-							]}
-						>
-							Tags
-						</a>
+					<nav class="mt-6 flex gap-6 font-sans text-sm text-ink-light dark:text-ink-light-dark">
+						<a href="/archive/" class:list={['no-underline', currentView === 'date' ? 'text-ink dark:text-ink-dark' : 'hover:text-ink dark:hover:text-ink-dark']}>按时间</a>
+						<a href="/archive/categories/" class:list={['no-underline', currentView === 'categories' ? 'text-ink dark:text-ink-dark' : 'hover:text-ink dark:hover:text-ink-dark']}>按分类</a>
+						<a href="/archive/tags/" class:list={['no-underline', currentView === 'tags' ? 'text-ink dark:text-ink-dark' : 'hover:text-ink dark:hover:text-ink-dark']}>按标签</a>
 					</nav>
 				</header>
 
 				<div class="space-y-3">
-					<h2 class="text-sm font-normal text-zinc-900 dark:text-zinc-100">
+					<h2 class="text-sm text-ink dark:text-ink-dark">
 						{category}
-						<span class="ml-2 font-sans text-xs text-zinc-400 dark:text-zinc-500">
-							{posts.length} post{posts.length === 1 ? '' : 's'}
-						</span>
+						<span class="ml-2 font-sans text-xs text-ink-faint dark:text-ink-faint-dark">{posts.length}</span>
 					</h2>
 					<ul class="space-y-2 text-sm">
-						{
-							posts.map((post) => (
-								<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-									<span class="w-24 shrink-0 font-sans text-xs text-zinc-400 dark:text-zinc-500">
-										<FormattedDate date={post.data.pubDate} />
-									</span>
-									<a
-										href={`/posts/${post.id}/`}
-										class="flex-1 text-zinc-900 no-underline hover:underline dark:text-zinc-100"
-									>
-										{post.data.title}
-									</a>
-								</li>
-							))
-						}
+						{posts.map((post) => (
+							<li class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+								<span class="w-24 shrink-0 font-sans text-xs text-ink-faint dark:text-ink-faint-dark">
+									<FormattedDate date={post.data.pubDate} />
+								</span>
+								<a href={`/posts/${post.id}/`} class="flex-1 text-ink no-underline hover:underline dark:text-ink-dark">
+									{post.data.title}
+								</a>
+							</li>
+						))}
 					</ul>
 				</div>
 			</section>

@@ -55,7 +55,7 @@ const tocItems = root.children;
 				data-toc-nav
 				class="sticky top-24 w-44"
 			>
-				<p class="mb-2 text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-400 dark:text-zinc-500">
+				<p class="mb-2 font-sans text-[11px] text-ink-faint dark:text-ink-faint-dark">
 					{title}
 				</p>
 				<div data-toc-scroll-root class="max-h-[68vh] overflow-y-auto">
@@ -71,7 +71,7 @@ const tocItems = root.children;
 		const tocNavs = Array.from(document.querySelectorAll('[data-toc-nav]'));
 		if (tocNavs.length === 0) return;
 
-		const ACTIVE_CLASSES = ['text-zinc-800', 'font-medium', 'dark:text-zinc-100'];
+		const ACTIVE_CLASSES = ['text-ink', 'dark:text-ink-dark'];
 
 		for (const tocNav of tocNavs) {
 			const links = Array.from(
