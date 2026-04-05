@@ -21,7 +21,7 @@ const showPlaceholder = import.meta.env.DEV && !isConfigured;
 {
 	isConfigured && (
 		<section class="mt-8" aria-label="Comments">
-			<div class="rounded-xl border border-zinc-200 bg-white/80 px-6 py-6 dark:border-zinc-700 dark:bg-[#323742]/80">
+			<div class="border border-zinc-300 bg-white px-6 py-6 dark:border-zinc-600 dark:bg-[#222]">
 				<div
 					id="giscus"
 					data-repo={repo}
@@ -124,7 +124,7 @@ const showPlaceholder = import.meta.env.DEV && !isConfigured;
 {
 	showPlaceholder && (
 		<section class="mt-8" aria-label="Comments placeholder">
-			<div class="rounded-xl border border-dashed border-zinc-300 bg-white/60 px-6 py-6 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-[#323742]/60 dark:text-zinc-300">
+			<div class="border border-dashed border-zinc-300 bg-white px-6 py-6 text-sm text-zinc-500 dark:border-zinc-600 dark:bg-[#222] dark:text-zinc-300">
 				Giscus is not configured yet. Add repo and category IDs in
 				<code>src/consts.ts</code>.
 			</div>

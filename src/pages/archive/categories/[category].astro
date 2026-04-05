@@ -68,10 +68,10 @@ const currentView: 'date' | 'categories' | 'tags' = 'categories';
 						<a
 							href="/archive/"
 							class:list={[
-								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
+								'inline-flex items-center border px-3 py-1 no-underline transition',
 								currentView === 'date'
 									? 'border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-200 dark:bg-zinc-200 dark:text-zinc-900'
-									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-[#323742]/70 dark:hover:border-zinc-600 dark:hover:text-zinc-100',
+									: 'border-zinc-300 bg-white hover:border-zinc-900 hover:text-zinc-900 dark:border-zinc-600 dark:bg-[#222] dark:hover:border-zinc-100 dark:hover:text-zinc-100',
 							]}
 						>
 							Date
@@ -79,10 +79,10 @@ const currentView: 'date' | 'categories' | 'tags' = 'categories';
 						<a
 							href="/archive/categories/"
 							class:list={[
-								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
+								'inline-flex items-center border px-3 py-1 no-underline transition',
 								currentView === 'categories'
 									? 'border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-200 dark:bg-zinc-200 dark:text-zinc-900'
-									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-[#323742]/70 dark:hover:border-zinc-600 dark:hover:text-zinc-100',
+									: 'border-zinc-300 bg-white hover:border-zinc-900 hover:text-zinc-900 dark:border-zinc-600 dark:bg-[#222] dark:hover:border-zinc-100 dark:hover:text-zinc-100',
 							]}
 						>
 							Categories
@@ -90,10 +90,10 @@ const currentView: 'date' | 'categories' | 'tags' = 'categories';
 						<a
 							href="/archive/tags/"
 							class:list={[
-								'inline-flex items-center rounded-full border px-3 py-1 no-underline transition',
+								'inline-flex items-center border px-3 py-1 no-underline transition',
 								currentView === 'tags'
 									? 'border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-200 dark:bg-zinc-200 dark:text-zinc-900'
-									: 'border-zinc-200 bg-white/70 hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-[#323742]/70 dark:hover:border-zinc-600 dark:hover:text-zinc-100',
+									: 'border-zinc-300 bg-white hover:border-zinc-900 hover:text-zinc-900 dark:border-zinc-600 dark:bg-[#222] dark:hover:border-zinc-100 dark:hover:text-zinc-100',
 							]}
 						>
 							Tags

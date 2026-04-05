@@ -13,12 +13,11 @@
 
 /* Base site styles */
 body {
-  /* Subtle neutral background, dark text, and smoother text rendering */
-  @apply bg-zinc-50 text-zinc-900 antialiased;
+  @apply bg-white text-zinc-900 antialiased;
 }
 
 html.dark body {
-  background-color: #292c33;
+  background-color: #1a1a1a;
   @apply text-zinc-100;
 }
 
