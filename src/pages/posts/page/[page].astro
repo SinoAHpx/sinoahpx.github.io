@@ -110,7 +110,7 @@ const { page, totalPages, posts } = Astro.props as Props;
 						<div>
 							<a
 								class="no-underline text-ink-light hover:text-ink dark:text-ink-light-dark dark:hover:text-ink-dark"
-								href={page === 2 ? '/posts/' : `/posts/page/${page - 1}/`}
+								href={page === 2 ? '/' : `/posts/page/${page - 1}/`}
 							>
 								&larr; 前页
 							</a>
