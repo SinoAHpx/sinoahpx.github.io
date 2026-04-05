@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* Use class-based dark mode (toggled by adding `dark` to <html>). */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -9,19 +8,17 @@
   --text-sm: 0.95rem;
   --text-base: 1.05rem;
 
-  /* Warm ink-on-paper palette */
-  --color-paper: #f8f5f0;
-  --color-ink: #2c2824;
-  --color-ink-light: #8a8178;
-  --color-ink-faint: #b8b0a6;
+  --color-paper: #f6f3ee;
+  --color-ink: #1a1714;
+  --color-ink-light: #6b6359;
+  --color-ink-faint: #9c9488;
 
-  --color-paper-dark: #1a1816;
-  --color-ink-dark: #e4dfd8;
-  --color-ink-light-dark: #7a7268;
-  --color-ink-faint-dark: #4a4440;
+  --color-paper-dark: #171513;
+  --color-ink-dark: #ece7df;
+  --color-ink-light-dark: #8a8278;
+  --color-ink-faint-dark: #554f47;
 }
 
-/* Base site styles */
 body {
   font-family: 'LXGW WenKai TC', 'Atkinson Hyperlegible', ui-serif, Georgia, serif;
   background-color: var(--color-paper);
@@ -34,18 +31,15 @@ html.dark body {
   color: var(--color-ink-dark);
 }
 
-/* Let prose content span the full width of its card */
 .prose {
   max-width: none;
 }
 
-/* Generous Chinese typographic rhythm */
 .prose p,
 .prose li {
   line-height: 1.9;
 }
 
-/* Prose link styling: subtle underline */
 .prose a {
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;

@@ -3,7 +3,7 @@ import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 ---
 
-<header class="pt-20 pb-10">
+<header class="pt-24 pb-16">
 	<button
 		id="theme-toggle"
 		type="button"
@@ -12,7 +12,6 @@ import HeaderLink from './HeaderLink.astro';
 		title="Toggle theme"
 	>
 		<span class="sr-only">Toggle theme</span>
-		<!-- Moon icon (shown in light mode) -->
 		<svg
 			class="h-5 w-5 dark:hidden"
 			viewBox="0 0 24 24"
@@ -25,7 +24,6 @@ import HeaderLink from './HeaderLink.astro';
 		>
 			<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
 		</svg>
-		<!-- Sun icon (shown in dark mode) -->
 		<svg
 			class="hidden h-5 w-5 dark:inline"
 			viewBox="0 0 24 24"
@@ -47,20 +45,19 @@ import HeaderLink from './HeaderLink.astro';
 			<path d="M17.66 6.34l1.41-1.41" />
 		</svg>
 	</button>
-	<div
-		class="mx-auto flex max-w-2xl flex-col items-center px-4 text-center"
-	>
+	<div class="mx-auto flex max-w-2xl flex-col items-center px-4 text-center">
 		<a
-			href="/posts/"
-			class="text-3xl tracking-[0.25em] text-ink no-underline dark:text-ink-dark"
+			href="/"
+			class="text-5xl tracking-[0.3em] text-ink no-underline dark:text-ink-dark"
 		>
 			{SITE_TITLE}
 		</a>
-		<nav class="mt-10 flex items-center gap-8 font-sans text-sm text-ink-light dark:text-ink-light-dark">
+		<div class="mt-6 flex justify-center">
+			<span class="block h-px w-10 bg-ink-faint/40 dark:bg-ink-faint-dark/60" />
+		</div>
+		<nav class="mt-8 flex items-center gap-8 text-xs text-ink-faint tracking-wide dark:text-ink-faint-dark">
 			<HeaderLink href="/">文章</HeaderLink>
-			<span class="text-ink-faint dark:text-ink-faint-dark">|</span>
 			<HeaderLink href="/archive">归档</HeaderLink>
-			<span class="text-ink-faint dark:text-ink-faint-dark">|</span>
 			<HeaderLink href="/about">关于</HeaderLink>
 		</nav>
 	</div>
@@ -85,9 +82,7 @@ import HeaderLink from './HeaderLink.astro';
 		const setStoredTheme = (theme) => {
 			try {
 				localStorage.setItem(storageKey, theme);
-			} catch {
-				// Ignore write errors (private mode, blocked storage, etc.)
-			}
+			} catch {}
 		};
 
 		const applyTheme = (theme, { persist } = { persist: false }) => {
@@ -102,7 +97,6 @@ import HeaderLink from './HeaderLink.astro';
 			);
 		};
 
-		// Initialize pressed state.
 		const initialIsDark = root.classList.contains('dark');
 		button.setAttribute('aria-pressed', String(initialIsDark));
 
@@ -111,12 +105,10 @@ import HeaderLink from './HeaderLink.astro';
 			applyTheme(isDark ? 'light' : 'dark', { persist: true });
 		});
 
-		// If the user hasn't set a preference, keep in sync with system changes.
 		const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
 		mql?.addEventListener?.('change', (event) => {
 			if (getStoredTheme() !== null) return;
 			applyTheme(event.matches ? 'dark' : 'light');
 		});
-
 	})();
 </script>
