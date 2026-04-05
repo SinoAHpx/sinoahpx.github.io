@@ -33,7 +33,7 @@ const currentView: 'date' | 'categories' | 'tags' = 'date';
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`Archive – ${SITE_TITLE}`}
+			title={`Archive -- ${SITE_TITLE}`}
 			description={SITE_DESCRIPTION}
 		/>
 	</head>
@@ -42,21 +42,21 @@ const currentView: 'date' | 'categories' | 'tags' = 'date';
 		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
 			<section class="space-y-8">
 				<header class="space-y-3">
-					<h1 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+					<h1 class="text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
 						Archive
 					</h1>
-					<p class="text-sm text-zinc-600 dark:text-zinc-300">
+					<p class="text-sm text-zinc-500 dark:text-zinc-400">
 						Browse posts by date, category, or tag.
 					</p>
 
-					<nav class="mt-4 flex gap-3 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+					<nav class="mt-4 flex gap-4 font-sans text-xs font-medium uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500">
 						<a
 							href="/archive/"
 							class:list={[
-								'inline-flex items-center border px-3 py-1 no-underline transition',
+								'no-underline transition',
 								currentView === 'date'
-									? 'border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-200 dark:bg-zinc-200 dark:text-zinc-900'
-									: 'border-zinc-300 bg-white hover:border-zinc-900 hover:text-zinc-900 dark:border-zinc-600 dark:bg-[#222] dark:hover:border-zinc-100 dark:hover:text-zinc-100',
+									? 'text-zinc-900 dark:text-zinc-100'
+									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
 							]}
 						>
 							Date
@@ -64,10 +64,10 @@ const currentView: 'date' | 'categories' | 'tags' = 'date';
 						<a
 							href="/archive/categories/"
 							class:list={[
-								'inline-flex items-center border px-3 py-1 no-underline transition',
+								'no-underline transition',
 								currentView === 'categories'
-									? 'border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-200 dark:bg-zinc-200 dark:text-zinc-900'
-									: 'border-zinc-300 bg-white hover:border-zinc-900 hover:text-zinc-900 dark:border-zinc-600 dark:bg-[#222] dark:hover:border-zinc-100 dark:hover:text-zinc-100',
+									? 'text-zinc-900 dark:text-zinc-100'
+									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
 							]}
 						>
 							Categories
@@ -75,10 +75,10 @@ const currentView: 'date' | 'categories' | 'tags' = 'date';
 						<a
 							href="/archive/tags/"
 							class:list={[
-								'inline-flex items-center border px-3 py-1 no-underline transition',
+								'no-underline transition',
 								currentView === 'tags'
-									? 'border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-200 dark:bg-zinc-200 dark:text-zinc-900'
-									: 'border-zinc-300 bg-white hover:border-zinc-900 hover:text-zinc-900 dark:border-zinc-600 dark:bg-[#222] dark:hover:border-zinc-100 dark:hover:text-zinc-100',
+									? 'text-zinc-900 dark:text-zinc-100'
+									: 'hover:text-zinc-900 dark:hover:text-zinc-100',
 							]}
 						>
 							Tags
@@ -92,7 +92,7 @@ const currentView: 'date' | 'categories' | 'tags' = 'date';
 							<section class="space-y-3" aria-labelledby={`year-${year}`}>
 								<h2
 									id={`year-${year}`}
-									class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400"
+									class="font-sans text-sm font-medium uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500"
 								>
 									{year}
 								</h2>
@@ -100,7 +100,7 @@ const currentView: 'date' | 'categories' | 'tags' = 'date';
 									{
 										posts.map((post) => (
 											<li class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-												<span class="w-24 shrink-0 text-xs text-zinc-400 dark:text-zinc-400">
+												<span class="w-24 shrink-0 font-sans text-xs text-zinc-400 dark:text-zinc-500">
 													<FormattedDate date={post.data.pubDate} />
 												</span>
 												<a

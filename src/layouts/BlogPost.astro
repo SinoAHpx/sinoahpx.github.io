@@ -53,27 +53,25 @@ const metaLinks = [
 		<Header />
 		<main class="mx-auto max-w-3xl px-4 pb-12 pt-8">
 			<div class="relative">
-				<article
-					class="overflow-hidden border border-zinc-300 bg-white dark:border-zinc-600 dark:bg-[#222]"
-				>
+				<article>
 					{heroImage && (
 						<Image
 							width={1020}
 							height={510}
 							src={heroImage}
 							alt=""
-							class="h-64 w-full object-cover sm:h-72"
+							class="mb-6 h-64 w-full object-cover sm:h-72"
 						/>
 					)}
 					<div
-						class="prose prose-zinc dark:prose-invert max-w-none px-6 pb-8 pt-6 text-sm leading-relaxed"
+						class="prose prose-zinc dark:prose-invert max-w-none pb-8 pt-2 text-sm leading-relaxed"
 					>
-						<header class="mb-6 text-center not-prose">
-							<h1 class="mb-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+						<header class="mb-8 not-prose">
+							<h1 class="mb-2 text-2xl font-normal tracking-tight text-zinc-900 dark:text-zinc-100">
 								{title}
 							</h1>
 							<div
-								class="flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-500 dark:text-zinc-400"
+								class="flex flex-wrap items-center gap-2 font-sans text-xs text-zinc-400 dark:text-zinc-500"
 							>
 								<span class="whitespace-nowrap">
 									<FormattedDate date={pubDate} />
@@ -91,7 +89,7 @@ const metaLinks = [
 						<slot />
 
 						<footer
-							class="mt-8 flex flex-wrap items-center justify-between border-t border-zinc-300 pt-4 text-xs text-zinc-400 not-prose dark:border-zinc-600 dark:text-zinc-400"
+							class="mt-10 flex flex-wrap items-center justify-between border-t border-zinc-200 pt-4 font-sans text-xs text-zinc-400 not-prose dark:border-zinc-700 dark:text-zinc-500"
 						>
 							<span class="whitespace-nowrap">
 								<FormattedDate date={pubDate} />
@@ -100,11 +98,11 @@ const metaLinks = [
 								{metaLinks.map((item, index) => (
 									<>
 										{index > 0 && (
-											<span class="mx-1 text-zinc-400 dark:text-zinc-500">/</span>
+											<span class="mx-1 text-zinc-300 dark:text-zinc-600">/</span>
 										)}
 										<a
 											href={item.href}
-											class="text-zinc-500 no-underline hover:text-zinc-900 hover:underline dark:text-zinc-400 dark:hover:text-zinc-100"
+											class="text-zinc-400 no-underline hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100"
 										>
 											{item.label}
 										</a>

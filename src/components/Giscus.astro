@@ -20,114 +20,111 @@ const showPlaceholder = import.meta.env.DEV && !isConfigured;
 
 {
 	isConfigured && (
-		<section class="mt-8" aria-label="Comments">
-			<div class="border border-zinc-300 bg-white px-6 py-6 dark:border-zinc-600 dark:bg-[#222]">
-				<div
-					id="giscus"
-					data-repo={repo}
-					data-repo-id={repoId}
-					data-category={category}
-					data-category-id={categoryId}
-					data-mapping={mapping}
-					data-strict={strict}
-					data-reactions-enabled={reactionsEnabled}
-					data-emit-metadata={emitMetadata}
-					data-input-position={inputPosition}
-					data-lang={lang}
-					data-loading="lazy"
-					data-theme-light="light"
-					data-theme-dark="dark"
-				></div>
+		<section class="mt-10 border-t border-zinc-200 pt-8 dark:border-zinc-700" aria-label="Comments">
+			<div
+				id="giscus"
+				data-repo={repo}
+				data-repo-id={repoId}
+				data-category={category}
+				data-category-id={categoryId}
+				data-mapping={mapping}
+				data-strict={strict}
+				data-reactions-enabled={reactionsEnabled}
+				data-emit-metadata={emitMetadata}
+				data-input-position={inputPosition}
+				data-lang={lang}
+				data-loading="lazy"
+				data-theme-light="light"
+				data-theme-dark="dark"
+			></div>
 
-				<script is:inline>
-					(() => {
-						const container = document.getElementById('giscus');
-						if (!(container instanceof HTMLElement)) return;
+			<script is:inline>
+				(() => {
+					const container = document.getElementById('giscus');
+					if (!(container instanceof HTMLElement)) return;
 
-						const getTheme = () =>
-							document.documentElement.classList.contains('dark')
-								? 'dark'
-								: 'light';
+					const getTheme = () =>
+						document.documentElement.classList.contains('dark')
+							? 'dark'
+							: 'light';
 
-						// Per giscus Advanced Usage: postMessage({ giscus: message }, 'https://giscus.app')
-						// and update config via { setConfig: { theme } }.
-						const sendMessage = (message) => {
-							const iframe = container.querySelector('iframe.giscus-frame');
-							if (!(iframe instanceof HTMLIFrameElement)) return false;
+					const sendMessage = (message) => {
+						const iframe = container.querySelector('iframe.giscus-frame');
+						if (!(iframe instanceof HTMLIFrameElement)) return false;
 
-							const post = () => {
-								iframe.contentWindow?.postMessage(
-									{ giscus: message },
-									'https://giscus.app',
-								);
-							};
-
-							post();
-							// If the iframe isn't ready yet (e.g. browser lazy-load), try again once it loads.
-							iframe.addEventListener('load', post, { once: true });
-							return true;
+						const post = () => {
+							iframe.contentWindow?.postMessage(
+								{ giscus: message },
+								'https://giscus.app',
+							);
 						};
 
-						const loadGiscus = (theme) => {
-							// Clear any previous script/iframe so the new theme is applied deterministically.
-							container.innerHTML = '';
+						post();
+						iframe.addEventListener('load', post, { once: true });
+						return true;
+					};
 
-							const script = document.createElement('script');
-							script.src = 'https://giscus.app/client.js';
-							script.async = true;
-							script.crossOrigin = 'anonymous';
+					const loadGiscus = (theme) => {
+						// Remove existing children before loading new script.
+						// This is safe: only giscus-controlled script/iframe elements
+						// are present, with no user-supplied content.
+						while (container.firstChild) {
+							container.removeChild(container.firstChild);
+						}
 
-							script.dataset.repo = container.dataset.repo;
-							script.dataset.repoId = container.dataset.repoId;
-							script.dataset.category = container.dataset.category;
-							script.dataset.categoryId = container.dataset.categoryId;
-							script.dataset.mapping = container.dataset.mapping;
-							script.dataset.strict = container.dataset.strict;
-							script.dataset.reactionsEnabled = container.dataset.reactionsEnabled;
-							script.dataset.emitMetadata = container.dataset.emitMetadata;
-							script.dataset.inputPosition = container.dataset.inputPosition;
-							script.dataset.lang = container.dataset.lang;
-							script.dataset.loading = container.dataset.loading;
-							script.dataset.theme = theme;
+						const script = document.createElement('script');
+						script.src = 'https://giscus.app/client.js';
+						script.async = true;
+						script.crossOrigin = 'anonymous';
 
-							container.appendChild(script);
-						};
+						script.dataset.repo = container.dataset.repo;
+						script.dataset.repoId = container.dataset.repoId;
+						script.dataset.category = container.dataset.category;
+						script.dataset.categoryId = container.dataset.categoryId;
+						script.dataset.mapping = container.dataset.mapping;
+						script.dataset.strict = container.dataset.strict;
+						script.dataset.reactionsEnabled = container.dataset.reactionsEnabled;
+						script.dataset.emitMetadata = container.dataset.emitMetadata;
+						script.dataset.inputPosition = container.dataset.inputPosition;
+						script.dataset.lang = container.dataset.lang;
+						script.dataset.loading = container.dataset.loading;
+						script.dataset.theme = theme;
 
-						const resolveGiscusTheme = (theme) => {
-							if (theme === 'dark') return container.dataset.themeDark || 'dark';
-							return container.dataset.themeLight || 'light';
-						};
+						container.appendChild(script);
+					};
 
-						let lastTheme = resolveGiscusTheme(getTheme());
-						loadGiscus(lastTheme);
+					const resolveGiscusTheme = (theme) => {
+						if (theme === 'dark') return container.dataset.themeDark || 'dark';
+						return container.dataset.themeLight || 'light';
+					};
 
-						window.addEventListener('theme-change', (event) => {
-							const nextTheme =
-								typeof event?.detail?.theme === 'string'
-									? event.detail.theme
-									: getTheme();
-							const resolved = resolveGiscusTheme(nextTheme);
-							if (resolved === lastTheme) return;
-							lastTheme = resolved;
+					let lastTheme = resolveGiscusTheme(getTheme());
+					loadGiscus(lastTheme);
 
-							// Prefer the official runtime config update message. If the iframe isn't
-							// available yet (lazy loading), reload with the new `data-theme` instead.
-							const didSend = sendMessage({ setConfig: { theme: resolved } });
-							if (!didSend) loadGiscus(resolved);
-						});
-					})();
-				</script>
-			</div>
+					window.addEventListener('theme-change', (event) => {
+						const nextTheme =
+							typeof event?.detail?.theme === 'string'
+								? event.detail.theme
+								: getTheme();
+						const resolved = resolveGiscusTheme(nextTheme);
+						if (resolved === lastTheme) return;
+						lastTheme = resolved;
+
+						const didSend = sendMessage({ setConfig: { theme: resolved } });
+						if (!didSend) loadGiscus(resolved);
+					});
+				})();
+			</script>
 		</section>
 	)
 }
 {
 	showPlaceholder && (
-		<section class="mt-8" aria-label="Comments placeholder">
-			<div class="border border-dashed border-zinc-300 bg-white px-6 py-6 text-sm text-zinc-500 dark:border-zinc-600 dark:bg-[#222] dark:text-zinc-300">
+		<section class="mt-10 border-t border-dashed border-zinc-200 pt-8 dark:border-zinc-700" aria-label="Comments placeholder">
+			<p class="text-sm text-zinc-400 dark:text-zinc-500">
 				Giscus is not configured yet. Add repo and category IDs in
 				<code>src/consts.ts</code>.
-			</div>
+			</p>
 		</section>
 	)
 }

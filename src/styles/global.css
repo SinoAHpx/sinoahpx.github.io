@@ -13,7 +13,7 @@
 
 /* Base site styles */
 body {
-  font-family: 'LXGW WenKai TC', 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'LXGW WenKai TC', 'Atkinson Hyperlegible', ui-serif, Georgia, serif;
   @apply bg-white text-zinc-900 antialiased;
 }
 
