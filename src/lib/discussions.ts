@@ -88,6 +88,8 @@ interface RawDiscussion {
 	title: string;
 	url: string;
 	createdAt: string;
+	bodyHTML: string;
+	author: RawAuthor | null;
 	reactionGroups: RawReactionGroup[];
 	comments: {
 		totalCount: number;
@@ -126,6 +128,12 @@ query Discussions($owner: String!, $name: String!, $categoryId: ID!, $cursor: St
         title
         url
         createdAt
+        bodyHTML
+        author {
+          login
+          avatarUrl
+          url
+        }
         reactionGroups {
           content
           reactors {
@@ -209,21 +217,50 @@ function normalizeComment(raw: RawComment): DiscussionComment {
 }
 
 function normalizeDiscussion(raw: RawDiscussion): Discussion {
-	const topLevel = raw.comments.nodes.map(normalizeComment);
-	// totalCount on the comments connection only counts top-level comments;
-	// add up replies ourselves so the page can show the true total.
-	const totalCommentCount = topLevel.reduce(
+	const replies = raw.comments.nodes.map(normalizeComment);
+
+	// In GitHub's data model, a discussion has a "body" (the original
+	// post) plus a list of "comments" (replies). From a reader's point
+	// of view both are just comments on the post, so we synthesize a
+	// pseudo-comment from the discussion body and put it first. This
+	// also matches what users expect after clicking the "在 GitHub 上
+	// 写下第一条评论" link — they fill out the body field, and that's
+	// the content they want shown.
+	//
+	// Skipped when the body is empty so a malformed discussion (or one
+	// auto-created by giscus with no real text) doesn't render a blank
+	// comment card.
+	const body = raw.bodyHTML?.trim();
+	const allComments: DiscussionComment[] = [];
+	if (body) {
+		allComments.push({
+			id: `${raw.id}:body`,
+			url: raw.url,
+			createdAt: raw.createdAt,
+			bodyHTML: raw.bodyHTML,
+			author: raw.author,
+			reactions: normalizeReactions(raw.reactionGroups),
+			replies: [],
+		});
+	}
+	allComments.push(...replies);
+
+	const totalCommentCount = allComments.reduce(
 		(sum, c) => sum + 1 + c.replies.length,
 		0,
 	);
+
 	return {
 		id: raw.id,
 		number: raw.number,
 		title: raw.title,
 		url: raw.url,
 		createdAt: raw.createdAt,
-		reactions: normalizeReactions(raw.reactionGroups),
-		comments: topLevel,
+		// The top-level reactions are surfaced through the synthesized
+		// body comment above (if there is one), so don't double-render
+		// them as a separate row at the top of the section.
+		reactions: body ? [] : normalizeReactions(raw.reactionGroups),
+		comments: allComments,
 		totalCommentCount,
 	};
 }
