@@ -55,14 +55,14 @@ const navItems = [
 </button>
 
 <!-- Desktop vertical aside: fixed to right edge -->
-<aside class="pointer-events-none fixed right-0 top-0 z-40 hidden h-screen items-start gap-14 pr-12 pt-24 lg:flex">
+<aside class="pointer-events-none fixed right-0 top-14 z-40 hidden items-center gap-14 pr-12 lg:flex">
 	<nav class="pointer-events-auto flex flex-col items-center gap-12">
 		{
 			navItems.map((item) => (
 				<a
 					href={item.href}
 					class:list={[
-						'vertical text-xl tracking-[0.4em] no-underline transition',
+						'vertical text-xl leading-none tracking-[0.4em] no-underline transition',
 						item.match === currentPath
 							? 'text-ink dark:text-ink-dark'
 							: 'text-ink-light hover:text-ink dark:text-ink-light-dark dark:hover:text-ink-dark',
