@@ -9,8 +9,7 @@ date: 2022-07-21 19:00:28
 pubDate: 2022-07-21 19:00:28
 password:
 summary:
-tags: [生活, 杂谈]
-categories: [Life]
+categories: ["生活"]
 ---
 
 ## 前言

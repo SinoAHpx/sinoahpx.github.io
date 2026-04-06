@@ -3,8 +3,8 @@ title: 'How to Build a document site by Vuepress'
 description: 'Step-by-step guide to building and deploying a documentation website with VuePress on Windows.'
 date: 2021-08-27 22:00:00
 pubDate: 2021-08-27 22:00:00
-tags: ["VuePress", "documenting"]
-categories: [Dev]
+tags: ["VuePress", "文档"]
+categories: ["技术"]
 ---
 
 # How to Build a document site by Vuepress

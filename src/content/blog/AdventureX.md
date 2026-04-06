@@ -9,8 +9,8 @@ date: 2025-08-04 15:07:34
 pubDate: 2025-08-04 15:07:34
 password:
 summary:
-tags: [ Prose ]
-categories: [Life]
+tags: ["黑客松"]
+categories: ["生活"]
 ---
 
 > 下面的文字都是我用语音输入的，所以很有可能会显得絮絮叨叨。这也没办法我只是记录一下而已。

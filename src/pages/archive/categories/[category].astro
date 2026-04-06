@@ -18,10 +18,12 @@ export async function getStaticPaths() {
 			categories.add(trimmed);
 		}
 	}
-	return Array.from(categories).map((category) => ({
-		params: { category },
-		props: { category },
-	}));
+	return Array.from(categories)
+		.sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))
+		.map((category) => ({
+			params: { category },
+			props: { category },
+		}));
 }
 
 type Props = { category: string };

@@ -8,6 +8,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
 
 type Post = CollectionEntry<'blog'>;
 const allPosts = await getCollection('blog');
+const taxonomyCollator = new Intl.Collator('zh-Hans-CN');
 
 function groupByTag(posts: Post[]) {
 	const groups = new Map<string, Post[]>();
@@ -20,7 +21,7 @@ function groupByTag(posts: Post[]) {
 			groups.set(trimmed, list);
 		}
 	}
-	return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b, 'en'));
+	return Array.from(groups.entries()).sort(([a], [b]) => taxonomyCollator.compare(a, b));
 }
 
 const tagGroups = groupByTag(allPosts);

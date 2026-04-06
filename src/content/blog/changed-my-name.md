@@ -9,8 +9,7 @@ date: 2022-07-21 18:33:00
 pubDate: 2022-07-21 18:33:00
 password: 
 summary:
-tags: ["Prose"]
-categories: ["Life"]
+categories: ["生活"]
 hidden: true
 ---
 

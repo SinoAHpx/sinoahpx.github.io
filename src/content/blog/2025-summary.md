@@ -2,8 +2,8 @@
 title: "2025 年末回览"
 description: "Spring is here, and so am I."
 pubDate: 2025-12-31 21:19:38
-tags: ["Life"]
-categories: ["Life"]
+tags: ["年终回顾"]
+categories: ["生活"]
 ---
 
 ## 写在 2025 年的末尾

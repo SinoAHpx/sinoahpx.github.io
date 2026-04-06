@@ -10,8 +10,7 @@ date: 2023-04-30 13:49:22
 pubDate: 2023-04-30 13:49:22
 password:
 summary: How can 
-tags: [Prose]
-categories: [Life]
+categories: ["思考"]
 ---
 
 ## 前言

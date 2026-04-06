@@ -9,8 +9,8 @@ date: 2023-01-19 07:00:04
 pubDate: 2023-01-19 07:00:04
 password:
 summary:
-tags: [CSharp]
-categories: [Dev]
+tags: ["C#"]
+categories: ["技术"]
 ---
 
 Refer to [Module Initializer](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/module-initializers) documentation, the `ModuleInitializer` is a useful attribute, which enable your program run something as it initialized.

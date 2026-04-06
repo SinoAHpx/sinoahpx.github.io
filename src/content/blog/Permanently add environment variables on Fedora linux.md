@@ -3,8 +3,8 @@ title: 'Permanently add environment variables on Fedora linux'
 description: 'How to permanently add environment variables on Fedora Linux so they persist across sessions.'
 date: 2022-04-13 23:40:00
 pubDate: 2022-04-13 23:40:00
-tags: ["Linux","Fedora"]
-categories: [Dev]
+tags: ["Linux", "Fedora"]
+categories: ["技术"]
 ---
 
 # Background

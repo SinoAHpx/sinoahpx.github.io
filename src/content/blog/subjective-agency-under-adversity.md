@@ -9,8 +9,8 @@ date: 2022-04-28 00:44:59
 pubDate: 2022-04-28 00:44:59
 password:
 summary: 
-tags: ["母语时间", "半吊子哲学"]
-categories: ["Life"]
+tags: ["哲学"]
+categories: ["思考"]
 hidden: true
 ---
 

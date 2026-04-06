@@ -9,8 +9,8 @@ date: 2022-07-27 10:17:59
 pubDate: 2022-07-27 10:17:59
 password:
 summary:
-tags: [CSharp, Nuget]
-categories: [ Dev ]
+tags: ["C#", "NuGet", "GitHub Actions"]
+categories: ["技术"]
 ---
 
 ## Background

@@ -9,8 +9,8 @@ date: 2022-06-06 16:18:28
 pubDate: 2022-06-06 16:18:28
 password:
 summary: There should be exactly one item with [DropdownButtonFormField]''s value blah blah
-tags: [flutter, dart, ui]
-categories: [Dev]
+tags: ["Flutter", "Dart"]
+categories: ["技术"]
 ---
 
 ## Scenario

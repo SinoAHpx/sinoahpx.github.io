@@ -1,6 +1,11 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+function normalizeTaxonomy(value: string[] | string | undefined) {
+	const items = value == null ? [] : Array.isArray(value) ? value : [value];
+	return Array.from(new Set(items.map((item) => item.trim()).filter(Boolean)));
+}
+
 const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
 	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
@@ -26,17 +31,11 @@ const blog = defineCollection({
 			tags: z
 				.union([z.array(z.string()), z.string()])
 				.optional()
-				.transform((value) => {
-					if (!value) return [];
-					return Array.isArray(value) ? value : [value];
-				}),
+				.transform(normalizeTaxonomy),
 			categories: z
 				.union([z.array(z.string()), z.string()])
 				.optional()
-				.transform((value) => {
-					if (!value) return [];
-					return Array.isArray(value) ? value : [value];
-				}),
+				.transform(normalizeTaxonomy),
 		}),
 });
 

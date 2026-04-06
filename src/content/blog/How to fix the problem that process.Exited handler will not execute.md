@@ -3,8 +3,8 @@ title: 'How to fix the problem that process.Exited handler will not execute'
 description: 'Investigating why a C# Process.Exited event handler never fires and how to fix it.'
 date: 2021-08-27 22:22:00
 pubDate: 2021-08-27 22:22:00
-tags: [CSharp]
-categories: [Dev]
+tags: ["C#"]
+categories: ["技术"]
 ---
 
 As the code below:

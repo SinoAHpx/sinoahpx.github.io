@@ -3,8 +3,8 @@ title: 'Dynamically convert JSON to C# object(Chinese)'
 description: 用 C# 反射优雅地将 JSON 文本动态转换为不同的实体类对象的实践。
 date: 2021-08-27 22:00:00
 pubDate: 2021-08-27 22:00:00
-tags: [CSharp]
-categories: [Dev]
+tags: ["C#", "JSON"]
+categories: ["技术"]
 ---
 
 ## Scenario

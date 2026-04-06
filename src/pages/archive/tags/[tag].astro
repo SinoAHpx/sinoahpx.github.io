@@ -18,10 +18,12 @@ export async function getStaticPaths() {
 			tags.add(trimmed);
 		}
 	}
-	return Array.from(tags).map((tag) => ({
-		params: { tag },
-		props: { tag },
-	}));
+	return Array.from(tags)
+		.sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'))
+		.map((tag) => ({
+			params: { tag },
+			props: { tag },
+		}));
 }
 
 type Props = { tag: string };
