@@ -1,6 +1,12 @@
 ---
 import { SITE_TITLE } from '../consts';
 
+interface Props {
+	minimal?: boolean;
+}
+
+const { minimal = false } = Astro.props as Props;
+
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
 const subpath = pathname.match(/[^\/]+/g);
 const currentPath = '/' + (subpath?.[0] || '');
@@ -54,6 +60,8 @@ const navItems = [
 	</svg>
 </button>
 
+{!minimal && (
+<>
 <!-- Desktop vertical aside: fixed to right edge -->
 <aside class="pointer-events-none fixed right-0 top-14 z-40 hidden items-center gap-14 pr-12 lg:flex">
 	<nav class="pointer-events-auto flex flex-col items-center gap-12">
@@ -112,6 +120,8 @@ const navItems = [
 		</nav>
 	</div>
 </header>
+</>
+)}
 
 <script is:inline>
 	(() => {

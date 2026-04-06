@@ -1,8 +1,20 @@
 ---
+interface Props {
+  minimal?: boolean;
+}
+
+const { minimal = false } = Astro.props as Props;
 const today = new Date();
 ---
 
-<footer class="mx-auto max-w-2xl px-6 pb-12 pt-8 text-center font-sans text-xs text-ink-faint dark:text-ink-faint-dark lg:mx-0 lg:ml-20 lg:mr-56 lg:text-left">
+<footer
+  class:list={[
+    'px-6 pb-12 pt-8 text-center font-sans text-xs text-ink-faint dark:text-ink-faint-dark',
+    minimal
+      ? 'mx-auto max-w-2xl'
+      : 'mx-auto max-w-2xl lg:mx-0 lg:ml-20 lg:mr-56 lg:text-left',
+  ]}
+>
   <div>&copy; {today.getFullYear()} AHpx</div>
   <div class="mt-1">
     <a

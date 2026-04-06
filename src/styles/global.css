@@ -33,6 +33,7 @@ html.dark body {
 
 .prose {
   max-width: none;
+  font-size: 1.2rem;
 }
 
 .prose p,
@@ -43,6 +44,32 @@ html.dark body {
 .prose a {
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+}
+
+/* Article headings: LXGW WenKai TC doesn't carry bold well, so keep them
+   at regular weight and rely on size for hierarchy. */
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-weight: normal;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.5em;
+  margin-bottom: 1em;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+}
+
+/* Images breathe more inside article body. */
+.prose img {
+  margin-top: 3em;
+  margin-bottom: 3em;
 }
 
 /* Vertical Chinese text: top-to-bottom, right-to-left */

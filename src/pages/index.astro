@@ -39,10 +39,10 @@ const posts = (await getCollection('blog')).sort(
 										/>
 									</div>
 								)}
-								<h2 class="text-lg leading-relaxed text-ink transition group-hover:text-ink-light dark:text-ink-dark dark:group-hover:text-ink-light-dark">
+								<h2 class="text-2xl leading-relaxed text-ink transition group-hover:text-ink-light dark:text-ink-dark dark:group-hover:text-ink-light-dark">
 									{post.data.title}
 								</h2>
-								<span class="mt-2 block font-sans text-xs text-ink-faint dark:text-ink-faint-dark">
+								<span class="mt-3 block font-sans text-sm text-ink-faint dark:text-ink-faint-dark">
 									<FormattedDate date={post.data.pubDate} />
 								</span>
 							</a>
