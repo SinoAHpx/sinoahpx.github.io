@@ -1,0 +1,28 @@
+name: Rebuild on discussion comment
+
+# Comments live in GitHub Discussions and are baked into the static site
+# at build time. When a discussion is created or someone leaves a new
+# comment, fire the deploy workflow so the site picks up the change.
+# Latency: roughly one Pages build (~1-2 min).
+#
+# Security note: this workflow only triggers an internal workflow_dispatch
+# call. It does not interpolate any github.event.* fields into shell
+# commands, so there is no injection surface from comment bodies.
+on:
+  discussion:
+    types: [created, edited, deleted]
+  discussion_comment:
+    types: [created, edited, deleted]
+
+permissions:
+  actions: write
+
+jobs:
+  trigger-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch the deploy workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy.yml --ref astro --repo "$GITHUB_REPOSITORY"
