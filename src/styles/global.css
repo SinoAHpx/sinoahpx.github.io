@@ -76,3 +76,46 @@ html.dark body {
 .vertical {
   writing-mode: vertical-rl;
 }
+
+/* Scrollbar: thin, subdued, ink-on-paper feel.
+   Firefox/standard via scrollbar-* properties; WebKit via pseudo-elements. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(156 148 136 / 0.35) transparent;
+}
+
+html.dark {
+  scrollbar-color: rgb(138 130 120 / 0.35) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(156 148 136 / 0.35);
+  border: none;
+  border-radius: 0;
+  transition: background-color 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 99 89 / 0.6);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+html.dark *::-webkit-scrollbar-thumb {
+  background-color: rgb(138 130 120 / 0.35);
+}
+
+html.dark *::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(236 231 223 / 0.5);
+}
