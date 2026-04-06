@@ -1,0 +1,11 @@
+zone_id = "your-ahpx-me-zone-id"
+
+# Set true if you want Terraform to manage `ahpx.me -> 76.76.21.21`.
+manage_root_dns_record = false
+vercel_apex_ip         = "76.76.21.21"
+root_dns_proxied       = false
+
+root_domain          = "ahpx.me"
+blog_domain          = "blog.ahpx.me"
+blog_redirect_target = "https://ahpx.me/posts/"
+redirect_status_code = 301

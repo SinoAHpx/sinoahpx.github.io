@@ -3,25 +3,15 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import TableOfContents from '../components/TableOfContents.astro';
-
-interface HeadingLink {
-	depth: number;
-	slug: string;
-	text: string;
-}
 
 interface Props {
 	title: string;
 	description?: string;
 	date?: Date;
 	showDate?: boolean;
-	toc?: boolean;
-	headings?: HeadingLink[];
 }
 
-const { title, description, date, showDate = false, toc = true, headings = [] } = Astro.props as Props;
-const showToc = toc && headings.length > 0;
+const { title, description, date, showDate = false } = Astro.props as Props;
 ---
 
 <html lang="en">
@@ -32,36 +22,33 @@ const showToc = toc && headings.length > 0;
 	<body>
 		<Header />
 		<main class="mx-auto max-w-2xl px-6 pb-16 lg:mx-0 lg:ml-20 lg:mr-56 lg:pt-14">
-			<div class="relative">
-				<article>
-					<div
-						class="prose prose-zinc dark:prose-invert max-w-none pb-8 text-sm leading-relaxed"
-					>
-						<header class="mb-10 not-prose">
-							<h1 class="text-2xl leading-snug text-ink dark:text-ink-dark">
-								{title}
-							</h1>
-							{
-								description && (
-									<p class="mt-3 text-sm text-ink-light dark:text-ink-light-dark">
-										{description}
-									</p>
-								)
-							}
-							{
-								showDate && date && (
-									<p class="mt-3 font-sans text-xs text-ink-faint dark:text-ink-faint-dark">
-										<FormattedDate date={date} />
-									</p>
-								)
-							}
-						</header>
+			<article>
+				<div
+					class="prose prose-zinc dark:prose-invert max-w-none pb-8 text-sm leading-relaxed"
+				>
+					<header class="mb-10 not-prose">
+						<h1 class="text-2xl leading-snug text-ink dark:text-ink-dark">
+							{title}
+						</h1>
+						{
+							description && (
+								<p class="mt-3 text-sm text-ink-light dark:text-ink-light-dark">
+									{description}
+								</p>
+							)
+						}
+						{
+							showDate && date && (
+								<p class="mt-3 font-sans text-xs text-ink-faint dark:text-ink-faint-dark">
+									<FormattedDate date={date} />
+								</p>
+							)
+						}
+					</header>
 
-						<slot />
-					</div>
-				</article>
-				{showToc && <TableOfContents headings={headings} />}
-			</div>
+					<slot />
+				</div>
+			</article>
 		</main>
 		<Footer />
 	</body>
