@@ -44,3 +44,8 @@ html.dark body {
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
+
+/* Vertical Chinese text: top-to-bottom, right-to-left */
+.vertical {
+  writing-mode: vertical-rl;
+}

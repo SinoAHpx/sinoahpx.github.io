@@ -1,64 +1,114 @@
 ---
 import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
+const subpath = pathname.match(/[^\/]+/g);
+const currentPath = '/' + (subpath?.[0] || '');
+
+const navItems = [
+	{ href: '/', label: '文章', match: '/' },
+	{ href: '/archive', label: '归档', match: '/archive' },
+	{ href: '/about', label: '关于', match: '/about' },
+];
 ---
 
-<header class="pt-24 pb-16">
-	<button
-		id="theme-toggle"
-		type="button"
-		class="fixed right-4 top-4 z-50 inline-flex h-10 w-10 items-center justify-center text-ink-faint transition hover:text-ink dark:text-ink-faint-dark dark:hover:text-ink-dark"
-		aria-label="Toggle theme"
-		title="Toggle theme"
+<button
+	id="theme-toggle"
+	type="button"
+	class="fixed bottom-4 right-4 z-50 inline-flex h-10 w-10 items-center justify-center text-ink-faint transition hover:text-ink dark:text-ink-faint-dark dark:hover:text-ink-dark"
+	aria-label="Toggle theme"
+	title="Toggle theme"
+>
+	<span class="sr-only">Toggle theme</span>
+	<svg
+		class="h-5 w-5 dark:hidden"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="1.5"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		aria-hidden="true"
 	>
-		<span class="sr-only">Toggle theme</span>
-		<svg
-			class="h-5 w-5 dark:hidden"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.5"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			aria-hidden="true"
-		>
-			<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-		</svg>
-		<svg
-			class="hidden h-5 w-5 dark:inline"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.5"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			aria-hidden="true"
-		>
-			<circle cx="12" cy="12" r="4" />
-			<path d="M12 2v2" />
-			<path d="M12 20v2" />
-			<path d="M4.93 4.93l1.41 1.41" />
-			<path d="M17.66 17.66l1.41 1.41" />
-			<path d="M2 12h2" />
-			<path d="M20 12h2" />
-			<path d="M4.93 19.07l1.41-1.41" />
-			<path d="M17.66 6.34l1.41-1.41" />
-		</svg>
-	</button>
-	<div class="mx-auto flex max-w-2xl flex-col items-center px-4 text-center">
+		<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+	</svg>
+	<svg
+		class="hidden h-5 w-5 dark:inline"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="1.5"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		aria-hidden="true"
+	>
+		<circle cx="12" cy="12" r="4" />
+		<path d="M12 2v2" />
+		<path d="M12 20v2" />
+		<path d="M4.93 4.93l1.41 1.41" />
+		<path d="M17.66 17.66l1.41 1.41" />
+		<path d="M2 12h2" />
+		<path d="M20 12h2" />
+		<path d="M4.93 19.07l1.41-1.41" />
+		<path d="M17.66 6.34l1.41-1.41" />
+	</svg>
+</button>
+
+<!-- Desktop vertical aside: fixed to right edge -->
+<aside class="pointer-events-none fixed right-0 top-0 z-40 hidden h-screen items-start gap-14 pr-12 pt-24 lg:flex">
+	<nav class="pointer-events-auto flex flex-col items-center gap-12">
+		{
+			navItems.map((item) => (
+				<a
+					href={item.href}
+					class:list={[
+						'vertical text-xl tracking-[0.4em] no-underline transition',
+						item.match === currentPath
+							? 'text-ink dark:text-ink-dark'
+							: 'text-ink-light hover:text-ink dark:text-ink-light-dark dark:hover:text-ink-dark',
+					]}
+				>
+					{item.label}
+				</a>
+			))
+		}
+	</nav>
+	<a
+		href="/"
+		class="vertical pointer-events-auto text-6xl leading-none tracking-[0.45em] text-ink no-underline dark:text-ink-dark"
+	>
+		{SITE_TITLE}
+	</a>
+</aside>
+
+<!-- Mobile horizontal header -->
+<header class="pt-16 pb-10 lg:hidden">
+	<div class="mx-auto flex max-w-2xl flex-col items-center px-6 text-center">
 		<a
 			href="/"
-			class="text-5xl tracking-[0.3em] text-ink no-underline dark:text-ink-dark"
+			class="text-4xl tracking-[0.3em] text-ink no-underline dark:text-ink-dark"
 		>
 			{SITE_TITLE}
 		</a>
 		<div class="mt-6 flex justify-center">
 			<span class="block h-px w-10 bg-ink-faint/40 dark:bg-ink-faint-dark/60" />
 		</div>
-		<nav class="mt-8 flex items-center gap-8 text-xs text-ink-faint tracking-wide dark:text-ink-faint-dark">
-			<HeaderLink href="/">文章</HeaderLink>
-			<HeaderLink href="/archive">归档</HeaderLink>
-			<HeaderLink href="/about">关于</HeaderLink>
+		<nav class="mt-8 flex items-center gap-8 text-xs tracking-wide text-ink-faint dark:text-ink-faint-dark">
+			{
+				navItems.map((item) => (
+					<a
+						href={item.href}
+						class:list={[
+							'no-underline transition',
+							item.match === currentPath
+								? 'text-ink dark:text-ink-dark'
+								: 'hover:text-ink dark:hover:text-ink-dark',
+						]}
+					>
+						{item.label}
+					</a>
+				))
+			}
 		</nav>
 	</div>
 </header>
