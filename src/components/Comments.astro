@@ -1,0 +1,184 @@
+---
+/**
+ * Server-rendered comments backed by GitHub Discussions.
+ *
+ * Fetches the discussion whose title matches `pathname` at build time
+ * and renders comments + reactions using the same .prose styling as the
+ * post body. Posting is delegated to GitHub via a deep link, so we ship
+ * zero JS and no third-party iframe.
+ */
+import {
+	getDiscussionForPathname,
+	getReplyUrl,
+	type DiscussionComment,
+	type ReactionContent,
+	type ReactionGroup,
+} from '../lib/discussions';
+
+interface Props {
+	pathname: string;
+}
+
+const { pathname } = Astro.props;
+const discussion = await getDiscussionForPathname(pathname);
+const replyUrl = getReplyUrl(pathname, discussion);
+const hasComments = discussion !== null && discussion.comments.length > 0;
+
+const REACTION_GLYPHS: Record<ReactionContent, string> = {
+	THUMBS_UP: '\u{1F44D}',
+	THUMBS_DOWN: '\u{1F44E}',
+	LAUGH: '\u{1F604}',
+	HOORAY: '\u{1F389}',
+	CONFUSED: '\u{1F615}',
+	HEART: '\u{2764}\u{FE0F}',
+	ROCKET: '\u{1F680}',
+	EYES: '\u{1F440}',
+};
+
+const REACTION_ORDER: ReactionContent[] = [
+	'THUMBS_UP',
+	'HEART',
+	'HOORAY',
+	'ROCKET',
+	'LAUGH',
+	'EYES',
+	'CONFUSED',
+	'THUMBS_DOWN',
+];
+
+function sortReactions(reactions: ReactionGroup[]): ReactionGroup[] {
+	const order = new Map(REACTION_ORDER.map((c, i) => [c, i]));
+	return [...reactions].sort(
+		(a, b) => (order.get(a.content) ?? 99) - (order.get(b.content) ?? 99),
+	);
+}
+
+const dateFormatter = new Intl.DateTimeFormat('zh-CN', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+
+function formatDate(iso: string): string {
+	return dateFormatter.format(new Date(iso));
+}
+
+// Flatten replies into a single list per top-level comment so we render
+// them as a nested thread but with predictable typing.
+function flattenThread(
+	comments: DiscussionComment[],
+): Array<{ comment: DiscussionComment; depth: number }> {
+	const out: Array<{ comment: DiscussionComment; depth: number }> = [];
+	for (const c of comments) {
+		out.push({ comment: c, depth: 0 });
+		for (const r of c.replies) {
+			out.push({ comment: r, depth: 1 });
+		}
+	}
+	return out;
+}
+
+const thread = discussion ? flattenThread(discussion.comments) : [];
+const headingCount = discussion?.totalCommentCount ?? 0;
+---
+
+<section
+	class="mt-16 border-t border-ink-faint/20 pt-10 dark:border-ink-faint-dark/30"
+	aria-label="Comments"
+>
+	<header class="mb-8 flex items-baseline justify-between font-sans">
+		<h2 class="text-base font-normal text-ink dark:text-ink-dark">
+			{headingCount > 0 ? `${headingCount} 条评论` : '评论'}
+		</h2>
+		<a
+			href={replyUrl}
+			rel="noopener noreferrer"
+			target="_blank"
+			class="text-xs text-ink-faint underline decoration-ink-faint/40 underline-offset-4 transition hover:text-ink hover:decoration-ink dark:text-ink-faint-dark dark:decoration-ink-faint-dark/40 dark:hover:text-ink-dark dark:hover:decoration-ink-dark"
+		>
+			{discussion ? '在 GitHub 上回复 \u2197' : '在 GitHub 上写下第一条评论 \u2197'}
+		</a>
+	</header>
+
+	{
+		discussion && discussion.reactions.length > 0 && (
+			<div class="mb-10 flex flex-wrap gap-2 font-sans text-xs text-ink-light dark:text-ink-light-dark">
+				{sortReactions(discussion.reactions).map((r) => (
+					<a
+						href={discussion.url}
+						rel="noopener noreferrer"
+						target="_blank"
+						class="inline-flex items-center gap-1.5 border border-ink-faint/30 px-2 py-1 transition hover:border-ink/50 dark:border-ink-faint-dark/40 dark:hover:border-ink-dark/60"
+					>
+						<span aria-hidden="true">{REACTION_GLYPHS[r.content]}</span>
+						<span>{r.count}</span>
+					</a>
+				))}
+			</div>
+		)
+	}
+
+	{
+		hasComments ? (
+			<ol class="space-y-12">
+				{thread.map(({ comment, depth }) => (
+					<li
+						class:list={[
+							'border-l-2 pl-5',
+							depth === 0
+								? 'border-ink-faint/30 dark:border-ink-faint-dark/40'
+								: 'ml-8 border-ink-faint/20 dark:border-ink-faint-dark/30',
+						]}
+					>
+						<div class="mb-3 flex items-baseline justify-between font-sans text-xs">
+							{comment.author ? (
+								<a
+									href={comment.author.url}
+									rel="noopener noreferrer"
+									target="_blank"
+									class="text-ink no-underline hover:underline dark:text-ink-dark"
+								>
+									{comment.author.login}
+								</a>
+							) : (
+								<span class="text-ink-faint dark:text-ink-faint-dark">
+									ghost
+								</span>
+							)}
+							<a
+								href={comment.url}
+								rel="noopener noreferrer"
+								target="_blank"
+								class="text-ink-faint no-underline transition hover:text-ink dark:text-ink-faint-dark dark:hover:text-ink-dark"
+							>
+								{formatDate(comment.createdAt)}
+							</a>
+						</div>
+						<div
+							class="prose prose-zinc dark:prose-invert max-w-none prose-p:my-3 prose-headings:my-4"
+							set:html={comment.bodyHTML}
+						/>
+						{comment.reactions.length > 0 && (
+							<div class="mt-4 flex flex-wrap gap-2 font-sans text-xs text-ink-light dark:text-ink-light-dark">
+								{sortReactions(comment.reactions).map((r) => (
+									<span class="inline-flex items-center gap-1.5 border border-ink-faint/25 px-1.5 py-0.5 dark:border-ink-faint-dark/30">
+										<span aria-hidden="true">
+											{REACTION_GLYPHS[r.content]}
+										</span>
+										<span>{r.count}</span>
+									</span>
+								))}
+							</div>
+						)}
+					</li>
+				))}
+			</ol>
+		) : (
+			<p class="font-sans text-sm text-ink-faint dark:text-ink-faint-dark">
+				{discussion === null
+					? '还没有人评论。'
+					: '还没有人评论。'}
+			</p>
+		)
+	}
+</section>

@@ -4,17 +4,13 @@
 export const SITE_TITLE = '楼窗晚风';
 export const SITE_DESCRIPTION = 'Welcome to my website!';
 
-// Giscus values come from https://giscus.app and are required for comments to render.
-export const GISCUS = {
-	repo: 'ahpxex/ahpxex.github.io',
-	repoId: 'MDEwOlJlcG9zaXRvcnkzNTMwNzY0ODc=',
+// Comments are rendered server-side from GitHub Discussions in this repo.
+// `categoryId` is the GraphQL node id used for filtering; `categorySlug` is
+// the URL-safe segment GitHub uses in the "new discussion" form.
+export const DISCUSSIONS = {
+	owner: 'ahpxex',
+	repo: 'ahpxex.github.io',
 	category: 'General',
 	categoryId: 'DIC_kwDOFQuFB84C0WRt',
-	mapping: 'pathname',
-	strict: '0',
-	reactionsEnabled: '1',
-	emitMetadata: '0',
-	inputPosition: 'top',
-	theme: 'light',
-	lang: 'en',
+	categorySlug: 'general',
 };
