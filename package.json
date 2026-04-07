@@ -14,8 +14,10 @@
     "@astrojs/rss": "^4.0.13",
     "@astrojs/sitemap": "^3.6.0",
     "@inquirer/prompts": "^8.0.1",
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.9",
+    "satori": "^0.26.0",
     "sharp": "^0.34.3",
     "tailwindcss": "^4.1.17"
   },

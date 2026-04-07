@@ -9,12 +9,23 @@ import icon from '../assets/icona.png';
 interface Props {
 	title: string;
 	description: string;
-	image?: ImageMetadata;
+	image?: ImageMetadata | string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image } = Astro.props as Props;
+
+// Normalize the optional `image` prop to an absolute URL string. Callers can
+// pass either an Astro `ImageMetadata` (e.g. an imported asset) or a plain
+// path/URL string (e.g. a build-time generated `/og/foo.png`).
+const imageHref =
+	typeof image === 'string'
+		? image
+		: image
+			? image.src
+			: undefined;
+const imageUrl = imageHref ? new URL(imageHref, Astro.url).toString() : undefined;
 ---
 
 <!-- Global Metadata -->
@@ -78,19 +89,11 @@ const { title, description, image } = Astro.props as Props;
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-{
-	image && (
-		<meta property="og:image" content={new URL(image.src, Astro.url)} />
-	)
-}
+{imageUrl && <meta property="og:image" content={imageUrl} />}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-{
-	image && (
-		<meta property="twitter:image" content={new URL(image.src, Astro.url)} />
-	)
-}
+{imageUrl && <meta property="twitter:image" content={imageUrl} />}

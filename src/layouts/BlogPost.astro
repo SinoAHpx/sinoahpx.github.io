@@ -19,6 +19,16 @@ const {
 	categories = [],
 } = Astro.props as Props;
 
+// Derive the post slug from the URL so we can point at the build-time
+// generated OG image at `/og/<slug>.png`. The post route is mounted at
+// `/posts/<slug>/`, where `<slug>` may contain forward slashes for nested
+// content. Stripping the prefix and trailing slash gives us the same
+// identifier the OG endpoint uses for `getStaticPaths`.
+const ogSlug = Astro.url.pathname
+	.replace(/^\/posts\//, '')
+	.replace(/\/$/, '');
+const ogImage = ogSlug ? `/og/${ogSlug}.png` : undefined;
+
 const metaLinks = [
 	...categories.map((category) => ({
 		href: `/archive/categories/${encodeURIComponent(category)}/`,
@@ -33,7 +43,11 @@ const metaLinks = [
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description ?? title} />
+		<BaseHead
+			title={title}
+			description={description ?? title}
+			image={ogImage}
+		/>
 	</head>
 
 	<body>
