@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { select, input, confirm } from '@inquirer/prompts';
+import { select, input, confirm, checkbox } from '@inquirer/prompts';
 
 const COLORS = {
 	reset: '\x1b[0m',
@@ -105,6 +105,104 @@ function splitCsv(value) {
 		.split(',')
 		.map(item => item.trim())
 		.filter(Boolean);
+}
+
+function extractFrontmatter(content) {
+	const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+	return match ? match[1] : null;
+}
+
+function parseTaxonomyValue(frontmatter, key) {
+	const inlineRe = new RegExp(`^${key}:[ \\t]*\\[(.*)\\][ \\t]*$`, 'm');
+	const inline = frontmatter.match(inlineRe);
+	if (inline) {
+		try {
+			return JSON.parse(`[${inline[1]}]`);
+		} catch {
+			return inline[1]
+				.split(',')
+				.map(s => s.trim().replace(/^["']|["']$/g, ''))
+				.filter(Boolean);
+		}
+	}
+	const scalarRe = new RegExp(`^${key}:[ \\t]*(?!\\[|$)(.*?)[ \\t]*$`, 'm');
+	const scalar = frontmatter.match(scalarRe);
+	if (scalar) {
+		const v = scalar[1].replace(/^["']|["']$/g, '').trim();
+		if (v) return [v];
+	}
+	return [];
+}
+
+function collectTaxonomies() {
+	const blogDir = path.join(process.cwd(), 'src', 'content', 'blog');
+	if (!fs.existsSync(blogDir)) {
+		return { tags: [], categories: [] };
+	}
+
+	const tags = new Map();
+	const categories = new Map();
+
+	const entries = fs.readdirSync(blogDir, { withFileTypes: true });
+	for (const entry of entries) {
+		if (!entry.isFile()) continue;
+		if (!/\.(md|mdx)$/i.test(entry.name)) continue;
+
+		const filePath = path.join(blogDir, entry.name);
+		let raw;
+		try {
+			raw = fs.readFileSync(filePath, 'utf8');
+		} catch {
+			continue;
+		}
+
+		const frontmatter = extractFrontmatter(raw);
+		if (!frontmatter) continue;
+
+		for (const item of parseTaxonomyValue(frontmatter, 'tags')) {
+			const value = String(item).trim();
+			if (!value) continue;
+			tags.set(value, (tags.get(value) ?? 0) + 1);
+		}
+		for (const item of parseTaxonomyValue(frontmatter, 'categories')) {
+			const value = String(item).trim();
+			if (!value) continue;
+			categories.set(value, (categories.get(value) ?? 0) + 1);
+		}
+	}
+
+	const sortByUsage = (map) =>
+		[...map.entries()]
+			.sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+			.map(([value, count]) => ({ value, count }));
+
+	return { tags: sortByUsage(tags), categories: sortByUsage(categories) };
+}
+
+async function pickTaxonomy({ label, existing }) {
+	let selected = [];
+	if (existing.length > 0) {
+		selected = await checkbox({
+			message: `Select ${label} (space to toggle, enter to confirm):`,
+			choices: existing.map(({ value, count }) => ({
+				name: `${value}  ${COLORS.dim}(${count})${COLORS.reset}`,
+				value,
+				short: value,
+			})),
+			loop: false,
+			pageSize: Math.min(15, Math.max(existing.length, 5)),
+			required: false,
+		});
+	}
+
+	const newInput = await input({
+		message: existing.length > 0
+			? `Add new ${label} (comma-separated, optional):`
+			: `${label.charAt(0).toUpperCase() + label.slice(1)} (comma-separated, optional):`,
+		default: '',
+	});
+
+	return Array.from(new Set([...selected, ...splitCsv(newInput)]));
 }
 
 function ensureDir(dirPath) {
@@ -307,25 +405,10 @@ async function createPost() {
 		pubDate = new Date(dateInput);
 	}
 
-	const tagsInput = await input({
-		message: 'Tags (comma-separated, optional):',
-		default: '',
-	});
+	const { tags: existingTags, categories: existingCategories } = collectTaxonomies();
 
-	const categoriesInput = await input({
-		message: 'Categories (comma-separated, optional):',
-		default: '',
-	});
-
-	const tags = tagsInput
-		.split(',')
-		.map(t => t.trim())
-		.filter(t => t);
-
-	const categories = categoriesInput
-		.split(',')
-		.map(c => c.trim())
-		.filter(c => c);
+	const tags = await pickTaxonomy({ label: 'tags', existing: existingTags });
+	const categories = await pickTaxonomy({ label: 'categories', existing: existingCategories });
 
 	const customSlug = await confirm({
 		message: 'Customize URL slug?',
